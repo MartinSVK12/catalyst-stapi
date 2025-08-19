@@ -28,7 +28,7 @@
   ],
   "depends": {
     "fabricloader": ">=0.15.5",
-    "catalyst-core": ">=1.0.0"
+    "catalyst-core": ">=1.0.0-alpha.1+stapi"
   },
   "suggests": {
   },
