@@ -1,3 +1,12 @@
+buildscript {
+    dependencies {
+        classpath 'org.kohsuke:github-api:1.135'
+    }
+    repositories {
+        mavenCentral()
+    }
+}
+
 
 plugins {
     id 'maven-publish'
@@ -231,4 +240,59 @@ static def fetchLatestVersion(String artifactUrl) {
     }
 
     return latestVersion
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "signalumMaven"
+            url = "https://maven.thesignalumproject.net/releases"
+            credentials(PasswordCredentials)
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+
+    publications {
+        maven(MavenPublication) {
+            groupId = project.maven_group
+            artifactId = project.archives_base_name
+            version = project.mod_version
+            from components.java
+        }
+    }
+}
+
+import net.fabricmc.loom.task.RemapJarTask
+import org.kohsuke.github.GHReleaseBuilder
+import org.kohsuke.github.GitHub
+
+import java.nio.file.Files
+
+tasks.register('github') {
+    doLast {
+
+        List<RemapJarTask> ts = List.of(
+                rootProject.project(":core").remapJar as RemapJarTask,
+                rootProject.project(":multiblocks").remapJar as RemapJarTask,
+                rootProject.project(":multipart").remapJar as RemapJarTask,
+        )
+
+        def github = GitHub.connectUsingOAuth(githubToken as String)
+        def repository = github.getRepository("MartinSVK12/catalyst-stapi")
+
+        def version = project.mod_version
+
+        def releaseBuilder = new GHReleaseBuilder(repository, version as String)
+        releaseBuilder.name("$version")
+        releaseBuilder.body(Files.readString(java.nio.file.Path.of("${project.projectDir}/CHANGELOG.md")))
+        releaseBuilder.commitish("master")
+
+        def release = releaseBuilder.create()
+        release.uploadAsset(project.file(remapJar.getArchiveFile().get().getAsFile()),"application/java-archive")
+        ts.forEach {
+            release.uploadAsset(project.file(it.getArchiveFile().get().getAsFile()),"application/java-archive")
+        }
+    }
 }

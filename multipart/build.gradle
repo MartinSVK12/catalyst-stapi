@@ -225,3 +225,25 @@ static def fetchLatestVersion(String artifactUrl) {
 
     return latestVersion
 }
+
+publishing {
+    repositories {
+        maven {
+            name = "signalumMaven"
+            url = "https://maven.thesignalumproject.net/releases"
+            credentials(PasswordCredentials)
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+
+    publications {
+        maven(MavenPublication) {
+            groupId = project.maven_group
+            artifactId = project.archives_base_name
+            version = project.mod_version
+            from components.java
+        }
+    }
+}
