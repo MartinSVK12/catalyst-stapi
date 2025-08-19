@@ -1,18 +1,25 @@
 package sunsetsatellite.catalyst.multipart.block.entity;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.AxeItem;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import sunsetsatellite.catalyst.Catalyst;
 import sunsetsatellite.catalyst.CatalystMultipart;
 import sunsetsatellite.catalyst.core.util.ScreenActionListener;
 import sunsetsatellite.catalyst.core.util.Side;
+import sunsetsatellite.catalyst.core.util.mp.BlockEntityUpdatePacket;
 import sunsetsatellite.catalyst.multipart.api.MultipartType;
 
 import java.util.ArrayList;
@@ -25,6 +32,7 @@ public class CarpenterWorkbenchBlockEntity extends BlockEntity implements Invent
     public int page = 1;
     public int maxPages = 1;
     public Side selectedSide = null;
+    public int lastId = 0;
 
     @Override
     public int size() {
@@ -115,12 +123,14 @@ public class CarpenterWorkbenchBlockEntity extends BlockEntity implements Invent
     @Override
     public void tick() {
         super.tick();
-        parts.clear();
+
         if(contents[1] != null && contents[1].getItem() instanceof AxeItem && contents[1].count <= 0){
             contents[1] = null;
         }
 
-        if(contents[0] != null && CatalystMultipart.validBlocks.contains(Block.BLOCKS[contents[0].itemId])){
+        parts.clear();
+
+        if(contents[0] != null && contents[0].getItem() instanceof BlockItem blockItem && CatalystMultipart.validBlocks.contains(blockItem.getBlock())){
             if(contents[1] != null && contents[1].getItem() instanceof AxeItem){
                 for (MultipartType type : MultipartType.types.values()) {
                     ItemStack stack = new ItemStack(CatalystMultipart.multipartItem,16 / type.thickness, 0);
@@ -128,10 +138,6 @@ public class CarpenterWorkbenchBlockEntity extends BlockEntity implements Invent
                     multipartTag.putString("Type",type.name.toString());
                     multipartTag.putString("Block", Catalyst.getIdFromStack(contents[0]));
                     multipartTag.putInt("Meta", contents[0].getDamage());
-                    for (Side side : Side.values()) {
-                        String texture = Atlases.getTerrain().getTexture(Block.BLOCKS[contents[0].itemId].getTexture(side.ordinal(), contents[0].getDamage())).getId().toString();
-                        multipartTag.putString("Texture_"+side.name().toLowerCase(), texture);
-                    }
                     stack.getStationNbt().put("Multipart",multipartTag);
                     parts.add(stack);
                 }
@@ -144,5 +150,45 @@ public class CarpenterWorkbenchBlockEntity extends BlockEntity implements Invent
             page = 1;
             maxPages = 1;
         }
+
+        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER){
+            MinecraftServer server = (MinecraftServer) FabricLoader.getInstance().getGameInstance();
+            List<ServerPlayNetworkHandler> list = server.connections.connections;
+            list.forEach(handler -> handler.sendPacket(new BlockEntityUpdatePacket(this)));
+        }
     }
+
+    @Override
+    public void readNbt(NbtCompound nbttagcompound) {
+        super.readNbt(nbttagcompound);
+        NbtList nbttaglist = nbttagcompound.getList("Items");
+        this.contents = new ItemStack[this.size()];
+
+        for(int i = 0; i < nbttaglist.size(); ++i) {
+            NbtCompound nbttagcompound1 = (NbtCompound)nbttaglist.get(i);
+            int j = nbttagcompound1.getByte("Slot") & 255;
+            if (j >= 0 && j < this.contents.length) {
+                this.contents[j] = new ItemStack(nbttagcompound1);
+            }
+        }
+
+    }
+
+    @Override
+    public void writeNbt(NbtCompound nbttagcompound) {
+        super.writeNbt(nbttagcompound);
+        NbtList nbttaglist = new NbtList();
+
+        for(int i = 0; i < this.contents.length; ++i) {
+            if (this.contents[i] != null) {
+                NbtCompound nbttagcompound1 = new NbtCompound();
+                nbttagcompound1.putByte("Slot", (byte)i);
+                this.contents[i].writeNbt(nbttagcompound1);
+                nbttaglist.add(nbttagcompound1);
+            }
+        }
+
+        nbttagcompound.put("Items", nbttaglist);
+    }
+
 }

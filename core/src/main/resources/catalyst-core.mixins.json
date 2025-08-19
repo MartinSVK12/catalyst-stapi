@@ -12,6 +12,7 @@
   ],
   "client": [
     "BlockRenderManagerMixin",
+    "MultiplayerInteractionManagerMixin",
     "WorldRendererMixin"
   ],
   "injectors": {

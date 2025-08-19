@@ -3,8 +3,6 @@ package sunsetsatellite.catalyst;
 import com.mojang.datafixers.util.Pair;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.impl.FabricLoaderImpl;
-import net.fabricmc.loader.impl.launch.FabricLauncher;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
@@ -25,7 +23,6 @@ import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.registry.ItemRegistry;
 import net.modificationstation.stationapi.api.util.Namespace;
-import net.modificationstation.stationapi.api.util.SideUtil;
 import net.modificationstation.stationapi.api.world.StationFlatteningWorld;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -182,10 +179,9 @@ public class Catalyst {
     }
 
     public static Vec2f getClickPosition(){
-        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER){
-            return new Vec2f();
-        }
+
         HitResult hit = Minecraft.INSTANCE.crosshairTarget;
+
         if (hit.type == HitResultType.BLOCK) {
             Vec3f vec3f = new Vec3f(hit.pos.x, hit.pos.y, hit.pos.z);
             Vec2f clickPosition = vec3f.subtract(vec3f.copy().floor()).abs().set(Direction.getDirectionFromSide(hit.side).getAxis(), 0).toVec2f();

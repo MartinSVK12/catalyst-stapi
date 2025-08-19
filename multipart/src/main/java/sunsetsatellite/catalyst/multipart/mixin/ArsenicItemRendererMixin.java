@@ -5,27 +5,19 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.render.platform.Lighting;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.client.StationRenderAPI;
 import net.modificationstation.stationapi.api.client.render.RendererAccess;
 import net.modificationstation.stationapi.api.client.render.model.BakedModel;
 import net.modificationstation.stationapi.api.client.render.model.BakedModelRenderer;
-import net.modificationstation.stationapi.api.client.render.model.BasicBakedModel;
-import net.modificationstation.stationapi.api.client.render.model.ModelBakeRotation;
 import net.modificationstation.stationapi.api.client.render.model.json.*;
-import net.modificationstation.stationapi.api.client.texture.Sprite;
 import net.modificationstation.stationapi.api.client.texture.SpriteAtlasTexture;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
-import net.modificationstation.stationapi.api.util.Identifier;
-import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.impl.client.arsenic.renderer.render.ArsenicItemRenderer;
-import net.modificationstation.stationapi.impl.client.arsenic.renderer.render.BakedModelRendererImpl;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,14 +27,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import sunsetsatellite.catalyst.CatalystMultipart;
-import sunsetsatellite.catalyst.core.util.Side;
-import sunsetsatellite.catalyst.multipart.api.Multipart;
-import sunsetsatellite.catalyst.multipart.block.MultipartRender;
-import sunsetsatellite.catalyst.multipart.mixin.accessor.JsonUnbakedModelAccessor;
-import sunsetsatellite.catalyst.multipart.mixin.accessor.ModelElementFaceAccessor;
 
-import static sunsetsatellite.catalyst.CatalystMultipart.getItemModel;
+import static sunsetsatellite.catalyst.CatalystMultipartClient.getItemModel;
 
 @Mixin(value = ArsenicItemRenderer.class,remap = false)
 public class ArsenicItemRendererMixin {

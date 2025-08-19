@@ -1,11 +1,19 @@
 package sunsetsatellite.catalyst.multipart.screen;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.AxeItem;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import org.lwjgl.opengl.GL11;
+import sunsetsatellite.catalyst.Catalyst;
+import sunsetsatellite.catalyst.CatalystMultipart;
 import sunsetsatellite.catalyst.core.util.Side;
+import sunsetsatellite.catalyst.multipart.api.MultipartType;
 import sunsetsatellite.catalyst.multipart.block.entity.CarpenterWorkbenchBlockEntity;
 import sunsetsatellite.catalyst.multipart.screen.handler.CarpenterWorkbenchScreenHandler;
 import sunsetsatellite.catalyst.multipart.util.SlotPartPicker;
@@ -39,6 +47,22 @@ public class CarpenterWorkbenchScreen extends HandledScreen {
         this.textRenderer.draw("Inventory", 8, this.backgroundHeight - 96 + 2, 4210752);
 
         this.textRenderer.draw(String.valueOf(tile.page), 150, 40, 0x404040);
+
+        if(Minecraft.INSTANCE.world.isRemote){
+            if(tile.contents[0] != null && tile.contents[0].getItem() instanceof BlockItem blockItem && CatalystMultipart.validBlocks.contains(blockItem.getBlock())) {
+                if (tile.contents[1] != null && tile.contents[1].getItem() instanceof AxeItem) {
+                    for (MultipartType type : MultipartType.types.values()) {
+                        ItemStack stack = new ItemStack(CatalystMultipart.multipartItem, 16 / type.thickness, 0);
+                        NbtCompound multipartTag = new NbtCompound();
+                        multipartTag.putString("Type", type.name.toString());
+                        multipartTag.putString("Block", Catalyst.getIdFromStack(tile.contents[0]));
+                        multipartTag.putInt("Meta", tile.contents[0].getDamage());
+                        stack.getStationNbt().put("Multipart", multipartTag);
+                        tile.parts.add(stack);
+                    }
+                }
+            }
+        }
     }
 
     @Override

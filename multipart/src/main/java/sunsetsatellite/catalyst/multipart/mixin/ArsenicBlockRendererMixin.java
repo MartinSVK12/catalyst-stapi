@@ -24,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import sunsetsatellite.catalyst.Catalyst;
 import sunsetsatellite.catalyst.CatalystMultipart;
 import sunsetsatellite.catalyst.core.util.Direction;
 import sunsetsatellite.catalyst.core.util.Side;
@@ -32,6 +33,7 @@ import sunsetsatellite.catalyst.multipart.api.SupportsMultiparts;
 import sunsetsatellite.catalyst.multipart.block.MultipartRender;
 import sunsetsatellite.catalyst.multipart.mixin.accessor.JsonUnbakedModelAccessor;
 
+import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -61,7 +63,11 @@ public class ArsenicBlockRendererMixin {
                     if (multipart == null) continue;
                     JsonUnbakedModel unbakedModel = (JsonUnbakedModel) CatalystMultipart.UNBAKED_MODELS.get(multipart.type.name);
                     BasicBakedModel.Builder builder = new BasicBakedModel.Builder(unbakedModel, ModelOverrideList.EMPTY, true);
-                    builder.setParticle(Atlases.getTerrain().getTexture(multipart.textures.get(Side.NORTH)).getSprite());
+                    HashMap<Side, Identifier> textures = (HashMap<Side, Identifier>) Catalyst.mapOf(Side.values(), Catalyst.arrayFill(new Identifier[Side.values().length], Identifier.of("minecraft:block/stone")));
+                    for (Side _side : Side.values()) {
+                        textures.put(_side,Atlases.getTerrain().getTexture(multipart.block.getTexture(_side.ordinal(), multipart.meta)).getId());
+                    }
+                    builder.setParticle(Atlases.getTerrain().getTexture(textures.get(Side.NORTH)).getSprite());
                     for (ModelElement modelElement : unbakedModel.getElements()) {
                         String textureId = "missing";
                         for (ModelElementFace elementFace : modelElement.faces.values()) {
@@ -72,7 +78,7 @@ public class ArsenicBlockRendererMixin {
                             for (net.modificationstation.stationapi.api.util.math.Direction direction : modelElement.faces.keySet()) {
                                 Side faceSide = Side.values()[direction.getId()];
                                 ModelElementFace modelElementFace = modelElement.faces.get(direction);
-                                Sprite sprite = Atlases.getTerrain().getTexture(multipart.textures.get(faceSide)).getSprite();
+                                Sprite sprite = Atlases.getTerrain().getTexture(textures.get(faceSide)).getSprite();
                                 Identifier id = Identifier.of("catalyst-multipart:multipart");
                                 if (modelElementFace.cullFace == null)
                                     builder.addQuad(JsonUnbakedModelAccessor.callCreateQuad(modelElement, modelElementFace, sprite, direction, ModelBakeRotation.X0_Y0, id));

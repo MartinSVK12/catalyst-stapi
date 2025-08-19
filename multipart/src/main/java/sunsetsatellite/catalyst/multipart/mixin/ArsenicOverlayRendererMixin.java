@@ -18,9 +18,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import sunsetsatellite.catalyst.CatalystMultipart;
+import sunsetsatellite.catalyst.CatalystMultipartClient;
 import sunsetsatellite.catalyst.multipart.block.MultipartRender;
 
 import static org.lwjgl.opengl.GL11.*;
+import static sunsetsatellite.catalyst.CatalystMultipartClient.getItemModel;
 
 @Mixin(value = ArsenicOverlayRenderer.class,remap = false)
 public abstract class ArsenicOverlayRendererMixin {
@@ -32,7 +34,7 @@ public abstract class ArsenicOverlayRendererMixin {
     public BakedModel modifyModel(BakedModel original, @Local ItemStack itemStack){
         Item item = itemStack.getItem();
         if(item instanceof MultipartRender) {
-            return CatalystMultipart.getItemModel(itemStack);
+            return getItemModel(itemStack);
         }
         return original;
     }
@@ -41,7 +43,7 @@ public abstract class ArsenicOverlayRendererMixin {
     public BakedModel getModel(BakedModelRenderer instance, ItemStack stack, World world, LivingEntity livingEntity, int i) {
         Item item = stack.getItem();
         if(item instanceof MultipartRender) {
-            return CatalystMultipart.getItemModel(stack);
+            return getItemModel(stack);
         }
         return instance.getModel(stack, world, livingEntity, i);
     }

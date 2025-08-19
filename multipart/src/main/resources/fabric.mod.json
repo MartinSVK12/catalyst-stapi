@@ -19,6 +19,7 @@
       "sunsetsatellite.catalyst.CatalystMultipart"
     ],
     "stationapi:event_bus_client": [
+      "sunsetsatellite.catalyst.CatalystMultipartClient"
     ],
     "stationapi:event_bus_server": [
     ],

@@ -80,10 +80,6 @@ public class CatalystMultipart {
     public static Item multipartItem;
 
     public static Block carpenterWorkbench;
-    public static int carpenterWorkbenchFront;
-    public static int carpenterWorkbenchTop;
-    public static int carpenterWorkbenchBottom;
-    public static int carpenterWorkbenchSide;
 
     public static List<Block> multipartTypeBlocks = new ArrayList<>();
 
@@ -92,7 +88,7 @@ public class CatalystMultipart {
     @EventListener
     public static void registerBlocks(BlockRegistryEvent event){
         multipart = makeBlock(NAMESPACE.id("multipart"), MultipartBlock.class);
-        carpenterWorkbench = new CarpenterWorkbenchBlock(NAMESPACE.id("carpenter_workbench"), Material.STONE).setTranslationKey(NAMESPACE, "carpenterWorkbench").setHardness(0.2f).setResistance(1);;
+        carpenterWorkbench = new CarpenterWorkbenchBlock(NAMESPACE.id("carpenter_workbench"), Material.STONE).setTranslationKey(NAMESPACE, "carpenterWorkbench").setHardness(3f).setResistance(1);;
 
         MultipartType.types.keySet().forEach(id -> multipartTypeBlocks.add(makeBlock(Identifier.of(id.toString().replace("block/", "")), MultipartBlock.class)));
     }
@@ -109,28 +105,12 @@ public class CatalystMultipart {
     }
 
     @EventListener
-    public static void registerTextures(TextureRegisterEvent event){
-        multipartItem.setTextureId(0);
-
-        carpenterWorkbenchBottom = Atlases.getTerrain().addTexture(NAMESPACE.id("block/carpenter_workbench_bottom")).index;
-        carpenterWorkbenchFront = Atlases.getTerrain().addTexture(NAMESPACE.id("block/carpenter_workbench_front")).index;
-        carpenterWorkbenchSide = Atlases.getTerrain().addTexture(NAMESPACE.id("block/carpenter_workbench_side")).index;
-        carpenterWorkbenchTop = Atlases.getTerrain().addTexture(NAMESPACE.id("block/carpenter_workbench_top")).index;
-    }
-
-    @EventListener
     public static void afterBlockItemRegistry(AfterBlockAndItemRegisterEvent event){
         for (Block block : Block.BLOCKS) {
             if(block != null && block.isFullCube()){
                 validBlocks.add(block);
             }
         }
-    }
-
-    @Environment(EnvType.CLIENT)
-    @EventListener
-    public void registerScreenHandlers(GuiHandlerRegistryEvent event) {
-        Registry.register(event.registry, NAMESPACE.id("open_carpenter_workbench"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) (p, i)-> new CarpenterWorkbenchScreen(p.inventory, ((CarpenterWorkbenchBlockEntity) i)), CarpenterWorkbenchBlockEntity::new));
     }
 
     @EventListener
@@ -156,39 +136,6 @@ public class CatalystMultipart {
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static BakedModel getItemModel(ItemStack itemStack) {
-        Item item = itemStack.getItem();
-        if(item instanceof MultipartRender multipartRender) {
-            StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
-            Multipart multipart = multipartRender.getMultipart(itemStack);
-            if (multipart == null) return null;
-            JsonUnbakedModel unbakedModel = (JsonUnbakedModel) CatalystMultipart.UNBAKED_MODELS.get(multipart.type.name);
-            BasicBakedModel.Builder builder = new BasicBakedModel.Builder(unbakedModel, ModelOverrideList.EMPTY, true);
-            builder.setParticle(Atlases.getTerrain().getTexture(multipart.textures.get(Side.NORTH)).getSprite());
-            for (ModelElement modelElement : unbakedModel.getElements()) {
-                String textureId = "missing";
-                for (ModelElementFace elementFace : modelElement.faces.values()) {
-                    textureId = elementFace.textureId.replace("#", "");
-                    break;
-                }
-                if (textureId.equalsIgnoreCase(Side.EAST.name())) {
-                    for (Direction direction : modelElement.faces.keySet()) {
-                        Side faceSide = Side.values()[direction.getId()];
-                        ModelElementFace modelElementFace = modelElement.faces.get(direction);
-                        Sprite sprite = Atlases.getTerrain().getTexture(multipart.textures.get(faceSide)).getSprite();
-                        Identifier id = Identifier.of("catalyst-multipart:multipart");
-                        if (modelElementFace.cullFace == null)
-                            builder.addQuad(JsonUnbakedModelAccessor.callCreateQuad(modelElement, modelElementFace, sprite, direction, ModelBakeRotation.X0_Y0, id));
-                        else
-                            builder.addQuad(Direction.transform(ModelBakeRotation.X0_Y0.getRotation().getMatrix(), modelElementFace.cullFace), JsonUnbakedModelAccessor.callCreateQuad(modelElement, modelElementFace, sprite, direction, ModelBakeRotation.X0_Y0, id));
-                    }
-                }
-            }
-            return builder.build();
-        }
-        return null;
     }
 
 }

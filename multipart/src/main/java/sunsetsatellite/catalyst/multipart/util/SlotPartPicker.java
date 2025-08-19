@@ -38,7 +38,7 @@ public class SlotPartPicker extends Slot {
 	@Override
 	public @Nullable ItemStack getStack() {
 		if(variableIndex >= 0 && variableIndex < tile.parts.size()){
-			return tile.parts.get(variableIndex);
+			return tile.parts.get(variableIndex).copy();
 		}
 		return null;
 	}
@@ -56,7 +56,7 @@ public class SlotPartPicker extends Slot {
 	@Override
 	public @Nullable ItemStack takeStack(int i) {
 		if(variableIndex < tile.parts.size()){
-			return tile.parts.get(variableIndex);
+			return tile.parts.get(variableIndex).copy();
 		}
 		return null;
 	}

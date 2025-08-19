@@ -1,19 +1,14 @@
 package sunsetsatellite.catalyst.multipart.item;
 
 import com.mojang.datafixers.util.Pair;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.glasslauncher.mods.alwaysmoreitems.api.SubItemProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.LiquidBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.client.item.CustomTooltipProvider;
-import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -24,25 +19,22 @@ import sunsetsatellite.catalyst.core.util.Direction;
 import sunsetsatellite.catalyst.core.util.Side;
 import sunsetsatellite.catalyst.core.util.section.BlockSection;
 import sunsetsatellite.catalyst.core.util.section.SideInteractable;
+import sunsetsatellite.catalyst.core.util.vector.Vec2f;
+import sunsetsatellite.catalyst.core.util.EnhancedBlockInteraction;
 import sunsetsatellite.catalyst.multipart.api.Multipart;
 import sunsetsatellite.catalyst.multipart.api.MultipartType;
 import sunsetsatellite.catalyst.multipart.api.SupportsMultiparts;
 import sunsetsatellite.catalyst.multipart.block.MultipartRender;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class MultipartItem extends TemplateItem implements MultipartRender, SideInteractable, CustomTooltipProvider {
+public class MultipartItem extends TemplateItem implements MultipartRender, SideInteractable, CustomTooltipProvider, EnhancedBlockInteraction {
     public MultipartItem(Identifier identifier) {
         super(identifier);
     }
 
     @Override
-    public boolean useOnBlock(ItemStack stack, PlayerEntity user, World world, int x, int y, int z, int side) {
+    public boolean useOnBlock(ItemStack stack, PlayerEntity user, World world, int x, int y, int z, int side, Vec2f clickPosition) {
 
-        if(world.isRemote){
-            return true;
-        }
+        if(world.isRemote) return true;
 
         Multipart multipart = getMultipart(stack);
         if(multipart == null) return false;
@@ -50,7 +42,7 @@ public class MultipartItem extends TemplateItem implements MultipartRender, Side
             return false;
         }
 
-        Pair<Direction, BlockSection> pair = Catalyst.getBlockSurfaceClickPosition(world, user, Side.values()[side], Catalyst.getClickPosition());
+        Pair<Direction, BlockSection> pair = Catalyst.getBlockSurfaceClickPosition(world, user, Side.values()[side], clickPosition);
         Side playerFacing = Catalyst.calculatePlayerFacing(user.yaw);
         if (pairIsInvalid(pair)) return false;
         Direction dir = pair.getSecond().toDirection(pair.getFirst(), playerFacing);
@@ -66,10 +58,9 @@ public class MultipartItem extends TemplateItem implements MultipartRender, Side
     public boolean addMultipart(SupportsMultiparts tile, Direction dir, ItemStack stack, PlayerEntity user, World world, int x, int y, int z, Multipart multipart, int side) {
         if(tile.getParts().get(dir) != null){
             placeMultipart((BlockEntity) tile,dir,stack,user,world,x,y,z,multipart,side);
-        }
-        if(stack.count > 0){
+        } else if(stack.count > 0){
             stack.count--;
-            tile.getParts().putIfAbsent(dir, multipart);
+            tile.getParts().put(dir, multipart);
             world.setBlockDirty(x,y,z);
             return true;
         }
@@ -115,7 +106,7 @@ public class MultipartItem extends TemplateItem implements MultipartRender, Side
 
         Block block = BlockRegistry.INSTANCE.get(Identifier.of(itemstack.getStationNbt().getCompound("Multipart").getString("Block")));
         int meta = itemstack.getStationNbt().getCompound("Multipart").getInt("Meta");
-        boolean specifiedSideOnly = itemstack.getStationNbt().getCompound("Multipart").contains("Side");
+        /*boolean specifiedSideOnly = itemstack.getStationNbt().getCompound("Multipart").contains("Side");
         if (specifiedSideOnly) {
             String texture = itemstack.getStationNbt().getCompound("Multipart").getString("Texture");
             if(texture.isEmpty()) return null;
@@ -124,16 +115,16 @@ public class MultipartItem extends TemplateItem implements MultipartRender, Side
             if(block != null && MultipartType.types.containsKey(id)) {
                 return new Multipart(MultipartType.types.get(id),block,textureId,side,meta);
             }
-        }
+        }*/
         if(block != null && MultipartType.types.containsKey(id)) {
-            List<Identifier> textures = new ArrayList<>();
+            /*List<Identifier> textures = new ArrayList<>();
             for (Side side : Side.values()) {
                 String texture = itemstack.getStationNbt().getCompound("Multipart").getString("Texture_"+side.name().toLowerCase());
                 if(texture.isEmpty()) return null;
                 Identifier textureId = Identifier.of(texture);
                 textures.add(textureId);
-            }
-            return new Multipart(MultipartType.types.get(id),block,textures.toArray(new Identifier[0]),meta);
+            }*/
+            return new Multipart(MultipartType.types.get(id),block/*,textures.toArray(new Identifier[0])*/,meta);
         }
         return null;
     }

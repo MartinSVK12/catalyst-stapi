@@ -89,6 +89,7 @@ public class BlockEntityUpdatePacket extends Packet implements ManagedPacket<Blo
                 } else {
                     BlockEntity newTe = BlockEntity.createFromNbt(data);
                     if(newTe != null){
+                        if(world.getBlockId(data.getInt("x"),data.getInt("y"),data.getInt("z")) == 0) return;
                         world.setBlockEntity(data.getInt("x"),data.getInt("y"),data.getInt("z"),newTe);
                     }
                 }

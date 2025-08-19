@@ -12,7 +12,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import sunsetsatellite.catalyst.CatalystMultipart;
+import sunsetsatellite.catalyst.CatalystMultipartClient;
 import sunsetsatellite.catalyst.multipart.block.MultipartRender;
+
+import static sunsetsatellite.catalyst.CatalystMultipartClient.*;
 
 @Mixin(value = BakedModelRendererImpl.class,remap = false)
 public class BakedModelRendererImplMixin {
@@ -23,7 +26,7 @@ public class BakedModelRendererImplMixin {
     private BakedModel getModel(BakedModelRendererImpl instance, ItemStack stack, World world, LivingEntity entity, int seed){
         Item item = stack.getItem();
         if(item instanceof MultipartRender) {
-            return CatalystMultipart.getItemModel(stack);
+            return getItemModel(stack);
         }
         return instance.getModel(stack, world, entity, seed);
     }
