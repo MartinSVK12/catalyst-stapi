@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "catalyst-core",
+  "version": "${version}",
+
+  "name": "Catalyst: Core (StAPI Edition)",
+  "description": "Library for advanced modding needs, now for StAPI!",
+  "authors": [
+    "sunsetsatellite"
+  ],
+
+  "license": "MIT",
+  "icon": "assets/catalyst-core/icon.png",
+
+  "environment": "*",
+  "accessWidener": "catalyst-core.accesswidener",
+  "entrypoints": {
+    "stationapi:event_bus": [
+      "sunsetsatellite.catalyst.Catalyst",
+      "sunsetsatellite.catalyst.core.event.PacketRegister"
+    ],
+    "stationapi:event_bus_client": [
+    ],
+    "stationapi:event_bus_server": [
+    ]
+  },
+  "mixins": [
+    "catalyst-core.mixins.json"
+  ],
+
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3"
+  }
+}

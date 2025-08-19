@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "sunsetsatellite.catalyst.multipart.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "ArsenicOverlayRendererMixin",
+    "BakedModelRendererImplMixin"
+  ],
+  "server": [
+  ],
+  "client": [
+    "ArsenicBlockRendererMixin",
+    "ArsenicItemRendererMixin",
+    "accessor.JsonUnbakedModelAccessor",
+    "accessor.ModelElementFaceAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

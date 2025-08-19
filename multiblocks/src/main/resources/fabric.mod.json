@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "catalyst-multiblocks",
+  "version": "${version}",
+  "name": "Catalyst: Multiblocks",
+  "description": "Multiblock module of Catalyst: Adds support for multiblock structures.",
+  "icon": "assets/catalyst-multiblocks/icon.png",
+  "authors": [
+    "sunsetsatellite"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": "https://github.com/MartinSVK12/catalyst"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "stationapi:event_bus": [
+      "sunsetsatellite.catalyst.CatalystMultiblocks"
+    ],
+    "stationapi:event_bus_client": [
+    ],
+    "stationapi:event_bus_server": [
+    ]
+  },
+  "mixins": [
+    "catalyst-multiblocks.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.5",
+    "catalyst-core": ">=1.0.0"
+  },
+  "suggests": {
+  },
+  "custom": {
+    "modmenu:api": true
+  }
+}

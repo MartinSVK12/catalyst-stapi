@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "catalyst-multipart",
+  "version": "${version}",
+
+  "name": "Catalyst: Multipart (StAPI Edition)",
+  "description": "Multipart module of Catalyst: Adds various bits and pieces of blocks that can be put together.",
+  "authors": [
+    "sunsetsatellite"
+  ],
+
+  "license": "MIT",
+  "icon": "assets/catalyst-multipart/icon.png",
+
+  "environment": "*",
+  "accessWidener": "catalyst-multipart.accesswidener",
+  "entrypoints": {
+    "stationapi:event_bus": [
+      "sunsetsatellite.catalyst.CatalystMultipart"
+    ],
+    "stationapi:event_bus_client": [
+    ],
+    "stationapi:event_bus_server": [
+    ],
+    "alwaysmoreitems:plugin": [
+      "sunsetsatellite.catalyst.multipart.api.impl.ami.AMIPlugin"
+    ]
+  },
+  "mixins": [
+    "catalyst-multipart.mixins.json"
+  ],
+
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3"
+  }
+}

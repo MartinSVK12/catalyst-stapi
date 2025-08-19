@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "catalyst-multipart:block/slab" }
+  }
+}

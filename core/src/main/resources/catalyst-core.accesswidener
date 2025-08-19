@@ -1,0 +1,7 @@
+accessWidener v2 named
+
+accessible field net/minecraft/nbt/NbtCompound entries Ljava/util/Map;
+accessible field net/minecraft/world/World storage Lnet/minecraft/world/storage/WorldStorage;
+accessible field net/minecraft/client/Minecraft INSTANCE Lnet/minecraft/client/Minecraft;
+accessible method net/minecraft/client/render/WorldRenderer renderOutline (Lnet/minecraft/util/math/Box;)V
+accessible field net/minecraft/block/entity/BlockEntity idToClass Ljava/util/Map;

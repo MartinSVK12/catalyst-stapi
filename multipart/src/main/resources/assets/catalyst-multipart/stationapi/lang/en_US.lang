@@ -1,0 +1,18 @@
+tile.@.multipart.name=Multipart
+item.@.multipart_item.name=Unknown Multipart
+tile.@.carpenterWorkbench.name=Carpenter Workbench
+
+multipart.foil.name=Foil
+multipart.cover.name=Cover
+multipart.panel.name=Panel
+multipart.slab.name=Slab
+multipart.antifoil.name=Antifoil
+multipart.anticover.name=Anticover
+multipart.antipanel.name=Antipanel
+multipart.hollow_foil.name=Hollow Foil
+multipart.hollow_cover.name=Hollow Cover
+multipart.hollow_panel.name=Hollow Panel
+multipart.hollow_slab.name=Hollow Slab
+multipart.pillar.name=Pillar
+
+tile.stoneSlab.name=Stone Slab

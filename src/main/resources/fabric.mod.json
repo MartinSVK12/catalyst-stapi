@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "catalyst-all",
+  "version": "${version}",
+
+  "name": "Catalyst: All (StAPI Edition)",
+  "description": "The full Catalyst package, includes all available modules.",
+  "authors": [
+    "sunsetsatellite"
+  ],
+
+  "license": "MIT",
+  "icon": "assets/catalyst-all/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "stationapi:event_bus": [
+    ],
+    "stationapi:event_bus_client": [
+    ],
+    "stationapi:event_bus_server": [
+    ]
+  },
+  "mixins": [
+  ],
+
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3"
+  }
+}
