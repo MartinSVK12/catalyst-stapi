@@ -104,9 +104,14 @@ dependencies {
         exclude group: "babric", module: "fabric-loader"
     }
 
-    include(implementation(project(path: ":core", configuration: "namedElements")))
-    include(implementation(project(path: ":multiblocks", configuration: "namedElements")))
-    include(implementation(project(path: ":multipart", configuration: "namedElements")))
+    implementation(project(path: ":core", configuration: "namedElements"))
+    implementation(project(path: ":multiblocks", configuration: "namedElements"))
+    implementation(project(path: ":multipart", configuration: "namedElements"))
+
+    include(project(":core"))
+    include(project(":multiblocks"))
+    include(project(":multipart"))
+
 
     modImplementation("net.glasslauncher.mods:ModMenu:${project.modmenu_version}") {
         transitive false

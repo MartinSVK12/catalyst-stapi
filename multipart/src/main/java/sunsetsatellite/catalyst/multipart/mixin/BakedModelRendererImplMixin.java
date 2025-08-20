@@ -17,7 +17,7 @@ import sunsetsatellite.catalyst.multipart.block.MultipartRender;
 
 import static sunsetsatellite.catalyst.CatalystMultipartClient.*;
 
-@Mixin(value = BakedModelRendererImpl.class,remap = false)
+@Mixin(value = BakedModelRendererImpl.class)
 public class BakedModelRendererImplMixin {
 
     @Redirect(method = "renderItem(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;Lnet/modificationstation/stationapi/api/client/render/model/json/ModelTransformation$Mode;Lnet/minecraft/world/World;FI)V",

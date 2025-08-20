@@ -37,7 +37,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
-@Mixin(value = ArsenicBlockRenderer.class, remap = false)
+@Mixin(value = ArsenicBlockRenderer.class)
 public class ArsenicBlockRendererMixin {
 
     @Shadow

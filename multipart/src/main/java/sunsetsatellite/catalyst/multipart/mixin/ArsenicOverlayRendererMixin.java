@@ -24,7 +24,7 @@ import sunsetsatellite.catalyst.multipart.block.MultipartRender;
 import static org.lwjgl.opengl.GL11.*;
 import static sunsetsatellite.catalyst.CatalystMultipartClient.getItemModel;
 
-@Mixin(value = ArsenicOverlayRenderer.class,remap = false)
+@Mixin(value = ArsenicOverlayRenderer.class)
 public abstract class ArsenicOverlayRendererMixin {
 
     @Shadow

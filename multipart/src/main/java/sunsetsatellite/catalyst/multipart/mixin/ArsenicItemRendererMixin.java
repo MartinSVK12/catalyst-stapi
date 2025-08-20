@@ -30,7 +30,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static sunsetsatellite.catalyst.CatalystMultipartClient.getItemModel;
 
-@Mixin(value = ArsenicItemRenderer.class,remap = false)
+@Mixin(value = ArsenicItemRenderer.class)
 public class ArsenicItemRendererMixin {
 
     @Shadow
