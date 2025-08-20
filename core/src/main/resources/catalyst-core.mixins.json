@@ -13,6 +13,7 @@
   ],
   "client": [
     "BlockRenderManagerMixin",
+    "SingleplayerInteractionManagerMixin",
     "MultiplayerInteractionManagerMixin",
     "WorldRendererMixin"
   ],

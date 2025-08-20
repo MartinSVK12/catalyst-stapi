@@ -72,7 +72,7 @@ public class CatalystMultipart {
 
     @EventListener
     public void loadModelEvent(LoadUnbakedModelEvent event) {
-        LOGGER.info(event.identifier);
+        //LOGGER.info(event.identifier);
         UNBAKED_MODELS.put(event.identifier,event.model);
     }
 
