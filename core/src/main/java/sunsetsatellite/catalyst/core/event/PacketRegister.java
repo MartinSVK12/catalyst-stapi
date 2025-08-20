@@ -8,6 +8,7 @@ import net.modificationstation.stationapi.api.registry.Registry;
 import net.modificationstation.stationapi.api.util.Namespace;
 import sunsetsatellite.catalyst.Catalyst;
 import sunsetsatellite.catalyst.core.util.mp.BlockEntityUpdatePacket;
+import sunsetsatellite.catalyst.core.util.mp.PlayerEnhancedActionC2SPacket;
 import sunsetsatellite.catalyst.core.util.mp.PlayerEnhancedInteractBlockC2SPacket;
 import sunsetsatellite.catalyst.core.util.mp.ScreenActionPacket;
 
@@ -21,7 +22,8 @@ public class PacketRegister {
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("screen_action"), ScreenActionPacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("block_entity_update"), BlockEntityUpdatePacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("enhanced_player_interact"), PlayerEnhancedInteractBlockC2SPacket.TYPE);
-        Catalyst.LOGGER.info("Registered packets");
+        Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("enhanced_player_action"), PlayerEnhancedActionC2SPacket.TYPE);
+        Catalyst.LOGGER.info("Registered packets.");
     }
 
 }

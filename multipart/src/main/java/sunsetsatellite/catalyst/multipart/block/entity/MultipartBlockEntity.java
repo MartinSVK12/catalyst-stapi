@@ -64,6 +64,7 @@ public class MultipartBlockEntity extends BlockEntity implements SupportsMultipa
         super.readNbt(tag);
         NbtCompound coversNbt = tag.getCompound("Parts");
 
+        parts.clear();
         for (Object o : coversNbt.entries.entrySet()) {
             Map.Entry<String, NbtElement> entry = (Map.Entry<String, NbtElement>) o;
             Direction dir = Direction.values()[Integer.parseInt(entry.getKey())];

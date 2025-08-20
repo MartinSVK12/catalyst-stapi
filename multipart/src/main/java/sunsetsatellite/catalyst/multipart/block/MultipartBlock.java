@@ -26,10 +26,9 @@ public class MultipartBlock extends TemplateBlockWithEntity implements Multipart
     }
 
     @Override
-    public void onBlockBreakStart(World world, int x, int y, int z, PlayerEntity player, Vec2f clickPosition) {
-        Side side = Side.values()[Minecraft.INSTANCE.crosshairTarget.side];
+    public void onBlockBreakStart(World world, int x, int y, int z, int side, PlayerEntity player, Vec2f clickPosition) {
         Side playerFacing = Catalyst.calculatePlayerFacing(player.yaw);
-        Pair<Direction, BlockSection> pair = Catalyst.getBlockSurfaceClickPosition(world, player, side, clickPosition);
+        Pair<Direction, BlockSection> pair = Catalyst.getBlockSurfaceClickPosition(world, player, Side.values()[side], clickPosition);
         Direction dir = pair.getSecond().toDirection(pair.getFirst(), playerFacing);
         BlockEntity tile = world.getBlockEntity(x, y, z);
         if(tile instanceof SupportsMultiparts multipartTile) {

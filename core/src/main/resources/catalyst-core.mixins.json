@@ -9,6 +9,7 @@
     "WorldMixin"
   ],
   "server": [
+    "ServerPlayerInteractionManagerMixin"
   ],
   "client": [
     "BlockRenderManagerMixin",

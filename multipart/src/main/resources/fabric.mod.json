@@ -33,6 +33,6 @@
 
   "depends": {
     "minecraft": "1.0.0-beta.7.3",
-    "catalyst-core": ">=1.0.0-alpha.1+stapi"
+    "catalyst-core": ">=1.0.0-beta.1+stapi"
   }
 }

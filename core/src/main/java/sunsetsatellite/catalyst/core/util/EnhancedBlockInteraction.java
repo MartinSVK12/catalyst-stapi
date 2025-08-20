@@ -10,5 +10,5 @@ public interface EnhancedBlockInteraction {
         return false;
     }
 
-    default void onBlockBreakStart(World world, int x, int y, int z, PlayerEntity player, Vec2f clickPosition){}
+    default void onBlockBreakStart(World world, int x, int y, int z, int side, PlayerEntity player, Vec2f clickPosition){}
 }
