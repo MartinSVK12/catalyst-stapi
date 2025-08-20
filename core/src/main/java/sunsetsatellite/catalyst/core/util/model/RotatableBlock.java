@@ -31,9 +31,9 @@ public abstract class RotatableBlock extends TemplateBlock implements LayeredCub
             0, 1, 5, 4, 3, 2};
     private static final Direction[] DIRECTIONS = new Direction[] { Direction.WEST, Direction.NORTH, Direction.EAST, Direction.SOUTH };
 
-    public static final TextureLayer BASE = new TextureLayer(0);
-    public static final TextureLayer ACTIVE = new TextureLayer(1);
-    public static final TextureLayer OVERLAY = new TextureLayer(2);
+    public final TextureLayer BASE = new TextureLayer(0);
+    public final TextureLayer ACTIVE = new TextureLayer(1);
+    public final TextureLayer OVERLAY = new TextureLayer(2);
 
     public final TextureLayer[] LAYERS = new TextureLayer[]{BASE,ACTIVE,OVERLAY};
 

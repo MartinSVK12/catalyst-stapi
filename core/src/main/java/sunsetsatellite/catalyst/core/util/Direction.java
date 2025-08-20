@@ -48,6 +48,28 @@ public enum Direction {
 		this.angle = angle;
 	}
 
+    public static Direction get(net.modificationstation.stationapi.api.util.math.Direction direction){
+        return switch (direction) {
+            case NORTH -> Direction.Z_NEG;
+            case SOUTH -> Direction.Z_POS;
+            case WEST -> Direction.X_NEG;
+            case EAST -> Direction.X_POS;
+            case UP -> Direction.Y_POS;
+            case DOWN -> Direction.Y_NEG;
+        };
+    }
+
+    public net.modificationstation.stationapi.api.util.math.Direction to(){
+        return switch (this) {
+            case X_POS -> net.modificationstation.stationapi.api.util.math.Direction.EAST;
+            case X_NEG -> net.modificationstation.stationapi.api.util.math.Direction.WEST;
+            case Y_POS -> net.modificationstation.stationapi.api.util.math.Direction.UP;
+            case Y_NEG -> net.modificationstation.stationapi.api.util.math.Direction.DOWN;
+            case Z_POS -> net.modificationstation.stationapi.api.util.math.Direction.SOUTH;
+            case Z_NEG -> net.modificationstation.stationapi.api.util.math.Direction.NORTH;
+        };
+    }
+
     public BlockEntity getTileEntity(BlockView world, BlockEntity tile){
         Vec3i pos = new Vec3i(tile.x + vec.x, tile.y + vec.y, tile.z + vec.z);
         return world.getBlockEntity(pos.x,pos.y,pos.z);

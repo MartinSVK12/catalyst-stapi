@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import sunsetsatellite.catalyst.core.util.Connection;
 import sunsetsatellite.catalyst.core.util.Direction;
 
-public interface IItemIO {
+public interface ItemIO {
 
     int getActiveItemSlotForSide(Direction dir);
 

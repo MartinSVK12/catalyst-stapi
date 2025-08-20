@@ -39,7 +39,7 @@ public class TextureLayer {
     }
 
     public TextureLayer set(@Nullable Identifier texture, Side... sides) {
-        return this.set(texture == null ? null : Atlases.getTerrain().getTexture(texture), sides);
+        return this.set(texture == null ? null : Atlases.getTerrain().addTexture(texture), sides);
     }
 
     public TextureLayer setAll(@Nullable Atlas.Sprite coordinate) {
@@ -49,7 +49,7 @@ public class TextureLayer {
     }
 
     public TextureLayer setAll(@Nullable Identifier texture) {
-        return this.setAll(texture == null ? null : Atlases.getTerrain().getTexture(texture));
+        return this.setAll(texture == null ? null : Atlases.getTerrain().addTexture(texture));
     }
 
     public TextureLayer copy(@NotNull TextureLayer layer) {

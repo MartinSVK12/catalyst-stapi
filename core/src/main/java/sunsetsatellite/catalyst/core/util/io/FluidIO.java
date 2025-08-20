@@ -4,7 +4,7 @@ package sunsetsatellite.catalyst.core.util.io;
 import sunsetsatellite.catalyst.core.util.Connection;
 import sunsetsatellite.catalyst.core.util.Direction;
 
-public interface IFluidIO {
+public interface FluidIO {
 
     int getActiveFluidSlotForSide(Direction dir);
 
