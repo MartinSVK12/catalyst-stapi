@@ -62,6 +62,9 @@ public class CarpenterWorkbenchScreen extends HandledScreen {
                     }
                 }
             }
+            if(tile.contents[0] == null) {
+                tile.parts.clear();
+            }
         }
     }
 
