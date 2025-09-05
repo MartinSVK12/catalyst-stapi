@@ -28,6 +28,7 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.UnmodifiableView;
 import sunsetsatellite.catalyst.core.util.Direction;
 import sunsetsatellite.catalyst.core.util.Side;
+import sunsetsatellite.catalyst.core.util.recipe.RecipeRegistry;
 import sunsetsatellite.catalyst.core.util.section.BlockSection;
 import sunsetsatellite.catalyst.core.util.vector.Vec2f;
 import sunsetsatellite.catalyst.core.util.vector.Vec3f;
@@ -47,6 +48,8 @@ public class Catalyst {
     public void onInit(InitEvent event) {
         LOGGER.info("Catalyst initialized!");
     }
+
+    public static RecipeRegistry RECIPES = new RecipeRegistry();
 
     public static BlockEntity getBlockEntity(Direction dir, BlockView world, BlockEntity origin) {
         return world.getBlockEntity(origin.x + dir.getVec().x, origin.y + dir.getVec().y, origin.z + dir.getVec().z);

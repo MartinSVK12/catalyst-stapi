@@ -195,6 +195,8 @@ public abstract class BlockRenderManagerMixin {
         if(block instanceof LayeredCubeModel model){
             setup(block, x, y, z);
 
+            this.skipFaceCulling = false;
+
             TextureLayer[] textureLayers = model.getTextureLayers();
             for (int i = 0; i < textureLayers.length; i++) {
                 int meta = this.blockView.getBlockMeta(x,y,z);
@@ -211,12 +213,13 @@ public abstract class BlockRenderManagerMixin {
                 } else {
                     this.useSurroundingBrightness = 1;
                 }
-                Atlas.Sprite bottomTex = model.getLayerTexture(this.blockView, (BlockStateView) this.blockView, x, y, z, meta, 0, i);
-                Atlas.Sprite topTex = model.getLayerTexture(this.blockView, (BlockStateView) this.blockView, x, y, z, meta, 1, i);
-                Atlas.Sprite eastTex = model.getLayerTexture(this.blockView, (BlockStateView) this.blockView, x, y, z, meta, 2, i);
-                Atlas.Sprite westTex = model.getLayerTexture(this.blockView, (BlockStateView) this.blockView, x, y, z, meta, 3, i);
-                Atlas.Sprite northTex = model.getLayerTexture(this.blockView, (BlockStateView) this.blockView, x, y, z, meta, 4, i);
-                Atlas.Sprite southTex = model.getLayerTexture(this.blockView, (BlockStateView) this.blockView, x, y, z, meta, 5, i);
+                BlockStateView blockStateView = (BlockStateView) this.blockView;
+                Atlas.Sprite bottomTex = model.getLayerTexture(this.blockView, blockStateView, x, y, z, meta, 0, i);
+                Atlas.Sprite topTex = model.getLayerTexture(this.blockView, blockStateView, x, y, z, meta, 1, i);
+                Atlas.Sprite eastTex = model.getLayerTexture(this.blockView, blockStateView, x, y, z, meta, 2, i);
+                Atlas.Sprite westTex = model.getLayerTexture(this.blockView, blockStateView, x, y, z, meta, 3, i);
+                Atlas.Sprite northTex = model.getLayerTexture(this.blockView, blockStateView, x, y, z, meta, 4, i);
+                Atlas.Sprite southTex = model.getLayerTexture(this.blockView, blockStateView, x, y, z, meta, 5, i);
                 if(bottomTex != null) bottomFace(block, x, y, z, red, green, blue, 0, 0, 0, bottomTex.index);
                 if(topTex != null) topFace(block, x, y, z, red, green, blue, 0, 0, 0, topTex.index);
                 if(eastTex != null) eastFace(block, x, y, z, red, green, blue, 0, 0, 0, eastTex.index);
@@ -226,7 +229,7 @@ public abstract class BlockRenderManagerMixin {
             }
 
             this.useAo = false;
-            cir.setReturnValue(var8);
+            cir.setReturnValue(true);
         }
     }
 

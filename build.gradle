@@ -8,12 +8,6 @@ buildscript {
 }
 
 
-plugins {
-    id 'maven-publish'
-    id 'fabric-loom' version '1.10.5'
-    id 'babric-loom-extension' version '1.10.2'
-    id "com.modrinth.minotaur" version "2.+"
-}
 
 version = property("mod_version")
 group = property("maven_group")
@@ -30,6 +24,9 @@ java {
 
 loom {
     //accessWidenerPath = file("src/main/resources/template.accesswidener")
+    mixin {
+        useLegacyMixinAp = false
+    }
 }
 
 repositories {
