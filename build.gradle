@@ -7,8 +7,6 @@ buildscript {
     }
 }
 
-
-
 version = property("mod_version")
 group = property("maven_group")
 

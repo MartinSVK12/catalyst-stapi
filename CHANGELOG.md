@@ -1,1 +1,1 @@
-Initial release.
+- Fixed crash with item dropped on the ground.

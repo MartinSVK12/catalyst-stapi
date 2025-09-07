@@ -27,6 +27,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import sunsetsatellite.catalyst.multipart.block.MultipartRender;
 
 import static sunsetsatellite.catalyst.CatalystMultipartClient.getItemModel;
 
@@ -39,21 +40,28 @@ public class ArsenicItemRendererMixin {
 
     @Inject(cancellable = true, method = "renderItemOnGui(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/client/texture/TextureManager;Lnet/minecraft/item/ItemStack;IILorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;", shift = At.Shift.AFTER))
     public void renderItemOnGui(TextRenderer textRenderer, TextureManager textureManager, ItemStack itemStack, int x, int y, CallbackInfo ci, CallbackInfo ci2) {
-        BakedModel model = getItemModel(itemStack);
-        if(model == null) return;
-        renderGuiItemModel(itemStack, x, y, model);
-        ci.cancel();
-        ci2.cancel();
+        if(itemStack != null && itemStack.getItem() instanceof MultipartRender){
+            BakedModel model = getItemModel(itemStack);
+            if(model == null) return;
+            renderGuiItemModel(itemStack, x, y, model);
+            ci.cancel();
+            ci2.cancel();
+        }
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/modificationstation/stationapi/api/client/render/model/BakedModelRenderer;getModel(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/LivingEntity;I)Lnet/modificationstation/stationapi/api/client/render/model/BakedModel;"))
-    private BakedModel replaceModel(BakedModelRenderer instance, ItemStack stack, World world, LivingEntity livingEntity, int i){
-        return getItemModel(stack) != null ? getItemModel(stack) : instance.getModel(stack, world, livingEntity, i);
+    private BakedModel replaceModel(BakedModelRenderer instance, ItemStack itemStack, World world, LivingEntity livingEntity, int i){
+        if(itemStack != null && itemStack.getItem() instanceof MultipartRender){
+            return getItemModel(itemStack) != null ? getItemModel(itemStack) : instance.getModel(itemStack, world, livingEntity, i);
+        }
+        return instance.getModel(itemStack, world, livingEntity, i);
     }
 
     @Inject(method = "renderModel",at = @At(value = "INVOKE", target = "Lnet/modificationstation/stationapi/api/client/render/model/BakedModelRenderer;renderItem(Lnet/minecraft/item/ItemStack;Lnet/modificationstation/stationapi/api/client/render/model/json/ModelTransformation$Mode;FLnet/modificationstation/stationapi/api/client/render/model/BakedModel;)V", shift = At.Shift.BEFORE))
     private void renderModel(ItemEntity item, float x, float y, float z, float delta, ItemStack itemStack, float var11, float var12, byte renderedAmount, SpriteAtlasTexture atlas, BakedModel model, CallbackInfo ci, @Local(argsOnly = true) LocalRef<BakedModel> localModel) {
-        localModel.set(getItemModel(itemStack));
+        if(itemStack != null && itemStack.getItem() instanceof MultipartRender){
+            localModel.set(getItemModel(itemStack));
+        }
     }
 
     @Unique
