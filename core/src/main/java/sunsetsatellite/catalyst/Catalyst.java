@@ -2,16 +2,23 @@ package sunsetsatellite.catalyst;
 
 import com.mojang.datafixers.util.Pair;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.ClientNetworkHandler;
+import net.minecraft.client.network.MultiplayerClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.NetworkHandler;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.hit.HitResultType;
 import net.minecraft.util.math.BlockPos;
@@ -24,6 +31,7 @@ import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.registry.ItemRegistry;
 import net.modificationstation.stationapi.api.util.Namespace;
 import net.modificationstation.stationapi.api.world.StationFlatteningWorld;
+import net.modificationstation.stationapi.impl.item.StationNBTSetter;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.UnmodifiableView;
 import sunsetsatellite.catalyst.core.util.Direction;
@@ -213,5 +221,37 @@ public class Catalyst {
             return clickPosition;
         }
         return new Vec2f();
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static ClientNetworkHandler getClientHandler() {
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            Minecraft client = (Minecraft) FabricLoader.getInstance().getGameInstance();
+            if(client.isWorldRemote()){
+                return ((MultiplayerClientPlayerEntity) client.player).networkHandler;
+            }
+        }
+        return null;
+    }
+
+    @Environment(EnvType.SERVER)
+    public static List<ServerPlayNetworkHandler> getServerHandlers() {
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            MinecraftServer server = (MinecraftServer) FabricLoader.getInstance().getGameInstance();
+            return server.connections.connections;
+        }
+        return null;
+    }
+
+    public static ItemStack newItemStack(Item item, int count, int metadata, NbtCompound tag){
+        ItemStack stack = new ItemStack(item, count, metadata);
+        StationNBTSetter.cast(stack).setStationNbt(tag);
+        return stack;
+    }
+
+    public static ItemStack newItemStack(Block block, int count, int metadata, NbtCompound tag){
+        ItemStack stack = new ItemStack(block, count, metadata);
+        StationNBTSetter.cast(stack).setStationNbt(tag);
+        return stack;
     }
 }

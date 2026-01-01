@@ -1,12 +1,17 @@
 package sunsetsatellite.catalyst.multiblocks;
 
+import com.google.gson.*;
+import net.glasslauncher.mods.alwaysmoreitems.recipe.multiblock.BlockPatternEntry;
+import net.glasslauncher.mods.alwaysmoreitems.recipe.multiblock.MultiBlockRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
+import net.modificationstation.stationapi.api.util.Identifier;
 import sunsetsatellite.catalyst.Catalyst;
+import sunsetsatellite.catalyst.core.util.StringUtils;
 import sunsetsatellite.catalyst.core.util.vector.Vec3i;
 
 import java.util.ArrayList;
@@ -37,6 +42,27 @@ public class StructureBuilder {
 		symbolMap.put(symbol, stack);
 		return this;
 	}
+
+    public StructureBuilder loadJson(String path){
+        String jsonString = StringUtils.readInputString(StructureBuilder.class.getResourceAsStream(path));
+        GsonBuilder builder = new GsonBuilder();
+        builder.setPrettyPrinting();
+        Gson gson = builder.create();
+        JsonArray jsonArray = JsonParser.parseString(jsonString).getAsJsonArray();
+        for(JsonElement element : jsonArray){
+            JsonArray layer = element.getAsJsonArray();
+            layers.add(gson.fromJson(layer, String[].class));
+        }
+        return this;
+    }
+
+    public MultiBlockRecipe toRecipe(Identifier name, List<Object> description){
+        List<BlockPatternEntry> blockPatterns = new ArrayList<>();
+        symbolMap.forEach((K,V)->{
+            blockPatterns.add(new BlockPatternEntry(K, Block.BLOCKS[V.itemId].getDefaultState(), V.getDamage(), V));
+        });
+        return new MultiBlockRecipe(name, description, layers, blockPatterns);
+    }
 
 	public NbtCompound build(){
 
