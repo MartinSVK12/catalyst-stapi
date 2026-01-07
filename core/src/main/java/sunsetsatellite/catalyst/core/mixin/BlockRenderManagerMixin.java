@@ -23,25 +23,7 @@ public abstract class BlockRenderManagerMixin {
     @Shadow
     private int textureOverride;
     @Shadow
-    private boolean flipTextureHorizontally;
-    @Shadow
     private boolean skipFaceCulling;
-    @Shadow
-    public static boolean fancyGraphics;
-    @Shadow
-    public boolean inventoryColorEnabled;
-    @Shadow
-    private int eastFaceRotation;
-    @Shadow
-    private int westFaceRotation;
-    @Shadow
-    private int southFaceRotation;
-    @Shadow
-    private int northFaceRotation;
-    @Shadow
-    private int topFaceRotation;
-    @Shadow
-    private int bottomFaceRotation;
     @Shadow
     private boolean useAo;
     @Shadow
@@ -195,12 +177,12 @@ public abstract class BlockRenderManagerMixin {
         if(block instanceof LayeredCubeModel model){
             setup(block, x, y, z);
 
-            this.skipFaceCulling = false;
+            //this.skipFaceCulling = false;
 
             TextureLayer[] textureLayers = model.getTextureLayers();
             for (int i = 0; i < textureLayers.length; i++) {
+                BlockStateView blockStateView = (BlockStateView) this.blockView;
                 int meta = this.blockView.getBlockMeta(x,y,z);
-                if(!model.renderLayer(this.blockView, x, y, z, meta, i)) continue;
                 if(model.isLayerFullbright(i)){
                     this.useSurroundingBrightness = 0;
                     this.topBrightness = 1;
@@ -213,7 +195,7 @@ public abstract class BlockRenderManagerMixin {
                 } else {
                     this.useSurroundingBrightness = 1;
                 }
-                BlockStateView blockStateView = (BlockStateView) this.blockView;
+                if(!model.renderLayer(this.blockView, blockStateView, x, y, z, meta, i)) continue;
                 Atlas.Sprite bottomTex = model.getLayerTexture(this.blockView, blockStateView, x, y, z, meta, 0, i);
                 Atlas.Sprite topTex = model.getLayerTexture(this.blockView, blockStateView, x, y, z, meta, 1, i);
                 Atlas.Sprite eastTex = model.getLayerTexture(this.blockView, blockStateView, x, y, z, meta, 2, i);

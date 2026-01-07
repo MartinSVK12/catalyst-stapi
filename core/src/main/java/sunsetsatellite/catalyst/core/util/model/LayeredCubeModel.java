@@ -12,5 +12,5 @@ public interface LayeredCubeModel {
 
     Atlas.@Nullable Sprite getLayerTexture(BlockView view, BlockStateView blockStateView, int x, int y, int z, int meta, int side, int layer);
 
-    boolean renderLayer(BlockView view, int x, int y, int z, int meta, int layer);
+    boolean renderLayer(BlockView view, BlockStateView blockStateView, int x, int y, int z, int meta, int layer);
 }

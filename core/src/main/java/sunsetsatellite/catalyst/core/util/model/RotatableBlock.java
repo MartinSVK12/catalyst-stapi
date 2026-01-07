@@ -1,15 +1,12 @@
 package sunsetsatellite.catalyst.core.util.model;
 
-import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.modificationstation.stationapi.api.StationAPI;
 import net.modificationstation.stationapi.api.block.BlockState;
-import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.state.StateManager;
 import net.modificationstation.stationapi.api.template.block.TemplateBlock;
@@ -39,13 +36,7 @@ public abstract class RotatableBlock extends TemplateBlock implements LayeredCub
 
     public RotatableBlock(Identifier identifier, Material material) {
         super(identifier, material);
-        // cope
-        //noinspection deprecation
-        StationAPI.EVENT_BUS.register(this);
     }
-
-    @EventListener
-    public abstract void initTextures(TextureRegisterEvent event);
 
     @Override
     public void onPlaced(World level, int x, int y, int z, LivingEntity living) {
@@ -110,7 +101,7 @@ public abstract class RotatableBlock extends TemplateBlock implements LayeredCub
     }
 
     @Override
-    public boolean renderLayer(BlockView view, int x, int y, int z, int meta, int layer) {
+    public boolean renderLayer(BlockView view, BlockStateView blockStateView, int x, int y, int z, int meta, int layer) {
         return true;
     }
 }

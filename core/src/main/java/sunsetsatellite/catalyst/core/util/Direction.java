@@ -11,19 +11,20 @@ import sunsetsatellite.catalyst.core.util.vector.Vec3i;
 
 import java.util.List;
 
+// b1.7.3 does directions differently apparently??
 public enum Direction {
-	/**EAST, 5, X*/
-    X_POS (new Vec3i(1,0,0),5,"EAST", Axis.X, (3*Math.PI)/2),
-	/**WEST, 4, X*/
-	X_NEG (new Vec3i(-1,0,0),4,"WEST", Axis.X, Math.PI/2),
+	/**NORTH, 5, X*/
+    X_POS (new Vec3i(1,0,0),5,"NORTH", Axis.X, (3*Math.PI)/2),
+	/**SOUTH, 4, X*/
+	X_NEG (new Vec3i(-1,0,0),4,"SOUTH", Axis.X, Math.PI/2),
 	/**UP, 1, Y*/
 	Y_POS (new Vec3i(0,1,0),1,"UP", Axis.Y, 0.0f),
 	/**DOWN, 0, Y*/
 	Y_NEG (new Vec3i(0,-1,0),0,"DOWN", Axis.Y, 0.0f),
-	/**SOUTH, 3, Z*/
-	Z_POS (new Vec3i(0,0,1),3,"SOUTH", Axis.Z, Math.PI),
-	/**NORTH, 2, Z*/
-	Z_NEG (new Vec3i(0,0,-1),2,"NORTH", Axis.Z, 0.0f);
+	/**WEST, 3, Z*/
+	Z_POS (new Vec3i(0,0,1),3,"WEST", Axis.Z, Math.PI),
+	/**EAST, 2, Z*/
+	Z_NEG (new Vec3i(0,0,-1),2,"EAST", Axis.Z, 0.0f);
 
 
 	private final Vec3i vec;
@@ -50,10 +51,10 @@ public enum Direction {
 
     public static Direction get(net.modificationstation.stationapi.api.util.math.Direction direction){
         return switch (direction) {
-            case NORTH -> Direction.Z_NEG;
-            case SOUTH -> Direction.Z_POS;
-            case WEST -> Direction.X_NEG;
-            case EAST -> Direction.X_POS;
+            case EAST -> Direction.Z_NEG;
+            case WEST -> Direction.Z_POS;
+            case NORTH -> Direction.X_NEG;
+            case SOUTH -> Direction.X_POS;
             case UP -> Direction.Y_POS;
             case DOWN -> Direction.Y_NEG;
         };
@@ -61,12 +62,12 @@ public enum Direction {
 
     public net.modificationstation.stationapi.api.util.math.Direction to(){
         return switch (this) {
-            case X_POS -> net.modificationstation.stationapi.api.util.math.Direction.EAST;
-            case X_NEG -> net.modificationstation.stationapi.api.util.math.Direction.WEST;
+            case Z_NEG -> net.modificationstation.stationapi.api.util.math.Direction.EAST;
+            case Z_POS -> net.modificationstation.stationapi.api.util.math.Direction.WEST;
             case Y_POS -> net.modificationstation.stationapi.api.util.math.Direction.UP;
             case Y_NEG -> net.modificationstation.stationapi.api.util.math.Direction.DOWN;
-            case Z_POS -> net.modificationstation.stationapi.api.util.math.Direction.SOUTH;
-            case Z_NEG -> net.modificationstation.stationapi.api.util.math.Direction.NORTH;
+            case X_POS -> net.modificationstation.stationapi.api.util.math.Direction.SOUTH;
+            case X_NEG -> net.modificationstation.stationapi.api.util.math.Direction.NORTH;
         };
     }
 
