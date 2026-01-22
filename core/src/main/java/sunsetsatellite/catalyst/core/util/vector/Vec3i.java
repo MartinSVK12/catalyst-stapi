@@ -3,6 +3,7 @@ package sunsetsatellite.catalyst.core.util.vector;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.BlockView;
 import net.modificationstation.stationapi.api.world.BlockStateView;
@@ -25,12 +26,30 @@ public class Vec3i {
         this.x = this.y = this.z = 0;
     }
 
+    public Vec3i(net.minecraft.util.math.Vec3i vec3i){
+        this.x = vec3i.x;
+        this.y = vec3i.y;
+        this.z = vec3i.z;
+    }
+
+    public Vec3i(net.modificationstation.stationapi.api.util.math.Vec3i vec3i){
+        this.x = vec3i.getX();
+        this.y = vec3i.getY();
+        this.z = vec3i.getZ();
+    }
+
     public Vec3i(int size){
         this.x = this.y = this.z = size;
     }
 
     public Vec3i(NbtCompound tag){
         readFromNBT(tag);
+    }
+
+    public Vec3i(BlockPos pos) {
+        this.x = pos.getX();
+        this.y = pos.getY();
+        this.z = pos.getZ();
     }
 
 

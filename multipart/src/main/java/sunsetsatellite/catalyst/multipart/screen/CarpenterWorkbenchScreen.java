@@ -29,7 +29,7 @@ public class CarpenterWorkbenchScreen extends HandledScreen {
     @Override
     public void init() {
         super.init();
-        for (Object slot : container.slots) {
+        for (Object slot : handler.slots) {
             if (slot instanceof SlotPartPicker) {
                 ((SlotPartPicker) slot).variableIndex = (((SlotPartPicker) slot).getSlotIndex()) + (9 * (tile.page - 1));
             }
@@ -77,7 +77,7 @@ public class CarpenterWorkbenchScreen extends HandledScreen {
             case 0:
                 if (tile.page < tile.maxPages) {
                     tile.page++;
-                    for (Object slot : container.slots) {
+                    for (Object slot : handler.slots) {
                         if (slot instanceof SlotPartPicker) {
                             ((SlotPartPicker) slot).variableIndex += 9;
                         }
@@ -87,7 +87,7 @@ public class CarpenterWorkbenchScreen extends HandledScreen {
             case 1:
                 if (tile.page > 1) {
                     tile.page--;
-                    for (Object slot : container.slots) {
+                    for (Object slot : handler.slots) {
                         if (slot instanceof SlotPartPicker) {
                             ((SlotPartPicker) slot).variableIndex -= 9;
                         }

@@ -92,6 +92,8 @@ dependencies {
         exclude group: "babric", module: "fabric-loader"
     }
 
+    modImplementation("net.danygames2014:NyaLib:${project.nyalib_version}")
+
     modImplementation("net.glasslauncher.mods:ModMenu:${project.modmenu_version}") {
         transitive false
     }

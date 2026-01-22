@@ -9,3 +9,5 @@ accessible field net/minecraft/server/network/ServerPlayNetworkHandler server Ln
 accessible field net/minecraft/server/network/ServerPlayNetworkHandler player Lnet/minecraft/entity/player/ServerPlayerEntity;
 accessible field net/minecraft/server/network/ServerPlayNetworkHandler teleported Z
 accessible field net/minecraft/server/network/ConnectionListener connections Ljava/util/ArrayList;
+accessible field net/minecraft/recipe/ShapelessRecipe input Ljava/util/List;
+accessible field net/minecraft/recipe/ShapedRecipe input [Lnet/minecraft/item/ItemStack;

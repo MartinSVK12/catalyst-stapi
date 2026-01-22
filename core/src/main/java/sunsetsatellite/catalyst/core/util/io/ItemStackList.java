@@ -143,7 +143,9 @@ public class ItemStackList implements IItemStackList, Iterable<ItemStack> {
         } else if (!strict) {
             amount = Math.min(amount, stack.count);
             if (!unlimited) amount = Math.min(amount, stack.getItem().getMaxCount());
+            int countBefore = stack.count;
             ItemStack splitStack = stack.split((int) amount);
+            int countAfter = stack.count;
             if (stack.count <= 0) {
                 contents.remove(slot);
             }

@@ -4,15 +4,19 @@
   "package": "sunsetsatellite.catalyst.core.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "CraftingRecipeManagerMixin",
+    "CraftingRegistryMixin",
     "FlattenedChunkMixin",
     "ItemStackMixin",
     "WorldMixin"
   ],
   "server": [
+    "ServerPlayerEntityMixin",
     "ServerPlayerInteractionManagerMixin"
   ],
   "client": [
     "BlockRenderManagerMixin",
+    "ClientPlayerEntityMixin",
     "HandledScreenMixin",
     "MultiplayerInteractionManagerMixin",
     "SingleplayerInteractionManagerMixin",

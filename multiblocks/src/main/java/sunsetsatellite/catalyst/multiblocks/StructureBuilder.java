@@ -61,7 +61,7 @@ public class StructureBuilder {
         symbolMap.forEach((K,V)->{
             blockPatterns.add(new BlockPatternEntry(K, Block.BLOCKS[V.itemId].getDefaultState(), V.getDamage(), V));
         });
-        return new MultiBlockRecipe(name, description, layers, blockPatterns);
+        return new MultiBlockRecipe(name, description, layers.toArray(new String[0][0]), blockPatterns);
     }
 
 	public NbtCompound build(){

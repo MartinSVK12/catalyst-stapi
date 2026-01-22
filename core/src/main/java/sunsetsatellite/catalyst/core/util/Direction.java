@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.world.BlockView;
 import net.modificationstation.stationapi.api.world.BlockStateView;
+import org.lwjgl.util.vector.Vector3f;
 import sunsetsatellite.catalyst.core.util.vector.Vec3f;
 import sunsetsatellite.catalyst.core.util.vector.Vec3i;
 
@@ -161,4 +162,54 @@ public enum Direction {
         Z_POS.opposite = Z_NEG;
     }
 
+    public static Vector3f[] getVerticesForSide(Direction dir) {
+        float min = -0.5f;
+        float max = 0.5f;
+
+        return switch (dir) {
+            case Y_POS -> // TOP
+                    new Vector3f[]{
+                            new Vector3f(min, max, min),
+                            new Vector3f(min, max, max),
+                            new Vector3f(max, max, max),
+                            new Vector3f(max, max, min)
+                    };
+            case Y_NEG -> // BOTTOM
+                    new Vector3f[]{
+                            new Vector3f(min, min, min),
+                            new Vector3f(max, min, min),
+                            new Vector3f(max, min, max),
+                            new Vector3f(min, min, max)
+                    };
+            case Z_NEG -> // NORTH
+                    new Vector3f[]{
+                            new Vector3f(min, min, min),
+                            new Vector3f(min, max, min),
+                            new Vector3f(max, max, min),
+                            new Vector3f(max, min, min)
+                    };
+            case Z_POS -> // SOUTH
+                    new Vector3f[]{
+                            new Vector3f(min, min, max),
+                            new Vector3f(max, min, max),
+                            new Vector3f(max, max, max),
+                            new Vector3f(min, max, max)
+                    };
+            case X_NEG -> // WEST
+                    new Vector3f[]{
+                            new Vector3f(min, min, min),
+                            new Vector3f(min, min, max),
+                            new Vector3f(min, max, max),
+                            new Vector3f(min, max, min)
+                    };
+            case X_POS -> // EAST
+                    new Vector3f[]{
+                            new Vector3f(max, min, min),
+                            new Vector3f(max, max, min),
+                            new Vector3f(max, max, max),
+                            new Vector3f(max, min, max)
+                    };
+            default -> new Vector3f[0];
+        };
+    }
 }

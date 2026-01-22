@@ -3,6 +3,7 @@ package sunsetsatellite.catalyst.core.util;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.block.BlockState;
 import org.jetbrains.annotations.NotNull;
 import sunsetsatellite.catalyst.core.util.vector.Vec3i;
 
@@ -15,6 +16,7 @@ public class BlockInstance {
     public Vec3i pos;
     public int meta = 0;
     public BlockEntity tile;
+    public BlockState state = null;
 	public Vec3i offset;
 
     public BlockInstance(@NotNull Block block, @NotNull Vec3i pos, BlockEntity tile){
@@ -28,6 +30,13 @@ public class BlockInstance {
         this.pos = pos;
         this.tile = tile;
         this.meta = meta;
+    }
+
+    public BlockInstance(@NotNull Block block, @NotNull Vec3i pos, BlockState state, BlockEntity tile){
+        this.block = block;
+        this.pos = pos;
+        this.tile = tile;
+        this.state = state;
     }
 
     public boolean exists(World world){
