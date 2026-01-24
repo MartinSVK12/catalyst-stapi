@@ -106,10 +106,10 @@ dependencies {
         transitive false
     }
 
-    implementation(project(path: ":ami", configuration: "namedElements"))
-    /*modImplementation("net.glasslauncher.mods:AlwaysMoreItems:${project.alwaysmoreitems_version}") {
+    //implementation(project(path: ":ami", configuration: "namedElements"))
+    modImplementation("net.glasslauncher.mods:AlwaysMoreItems:${project.alwaysmoreitems_version}") {
         transitive false
-    }*/
+    }
 
     modImplementation("maven.modrinth:retrocommands:${project.retrocommands_version}-b1.7.3") {
         transitive false

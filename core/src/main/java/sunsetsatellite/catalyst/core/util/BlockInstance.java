@@ -32,6 +32,14 @@ public class BlockInstance {
         this.meta = meta;
     }
 
+    public BlockInstance(@NotNull Block block, @NotNull Vec3i pos, int meta, BlockState state, BlockEntity tile){
+        this.block = block;
+        this.pos = pos;
+        this.tile = tile;
+        this.state = state;
+        this.meta = meta;
+    }
+
     public BlockInstance(@NotNull Block block, @NotNull Vec3i pos, BlockState state, BlockEntity tile){
         this.block = block;
         this.pos = pos;

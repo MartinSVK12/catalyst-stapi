@@ -5,6 +5,7 @@ import lombok.Getter;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.world.BlockView;
+import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.world.BlockStateView;
 import org.lwjgl.util.vector.Vector3f;
 import sunsetsatellite.catalyst.core.util.vector.Vec3f;
@@ -86,6 +87,26 @@ public enum Direction {
 		Vec3i pos = new Vec3i(baseVec.x + vec.x, baseVec.y + vec.y, baseVec.z + vec.z);
 		return world.getBlockState(pos.x,pos.y,pos.z).getBlock();
 	}
+
+    public BlockState getBlockState(BlockStateView world, BlockEntity tile){
+        Vec3i pos = new Vec3i(tile.x + vec.x, tile.y + vec.y, tile.z + vec.z);
+        return world.getBlockState(pos.x,pos.y,pos.z);
+    }
+
+    public BlockState getBlockState(BlockStateView world, Vec3i baseVec){
+        Vec3i pos = new Vec3i(baseVec.x + vec.x, baseVec.y + vec.y, baseVec.z + vec.z);
+        return world.getBlockState(pos.x,pos.y,pos.z);
+    }
+
+    public int getBlockMeta(BlockView world, BlockEntity tile){
+        Vec3i pos = new Vec3i(tile.x + vec.x, tile.y + vec.y, tile.z + vec.z);
+        return world.getBlockMeta(pos.x,pos.y,pos.z);
+    }
+
+    public int getBlockMeta(BlockView world, Vec3i baseVec){
+        Vec3i pos = new Vec3i(baseVec.x + vec.x, baseVec.y + vec.y, baseVec.z + vec.z);
+        return world.getBlockMeta(pos.x,pos.y,pos.z);
+    }
 
     public BlockEntity getTileEntity(BlockView world, Vec3i baseVec){
         Vec3i pos = new Vec3i(baseVec.x + vec.x, baseVec.y + vec.y, baseVec.z + vec.z);

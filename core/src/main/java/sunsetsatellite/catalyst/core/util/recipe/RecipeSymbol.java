@@ -86,7 +86,10 @@ public class RecipeSymbol {
         if(override != null) return override;
         if(stack != null) {
             return Collections.singletonList(stack);
-        } /*else if (itemGroup != null && stack == null) {
+        } else if (itemGroup != null) {
+            return Arrays.stream(Item.ITEMS).filter(Objects::nonNull).filter((I)-> I.getRegistryEntry().streamTags().toList().contains(itemGroup)).map(ItemStack::new).toList();
+            //.getRegistryEntry().streamTags().toList()
+        }  /*else if (itemGroup != null && stack == null) {
             return Registries.ITEM_GROUPS.getItem(itemGroup);
         } else if (itemGroup != null) {
             ArrayList<ItemStack> list = new ArrayList<>(Registries.ITEM_GROUPS.getItem(itemGroup));

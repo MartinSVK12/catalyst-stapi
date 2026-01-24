@@ -20,6 +20,8 @@
     "HandledScreenMixin",
     "MultiplayerInteractionManagerMixin",
     "SingleplayerInteractionManagerMixin",
+    "StationTesselatorImplMixin",
+    "TessellatorMixin",
     "WorldRendererMixin"
   ],
   "injectors": {

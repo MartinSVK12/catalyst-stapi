@@ -15,9 +15,9 @@ import java.util.*;
 public class ItemStackList implements IItemStackList, Iterable<ItemStack> {
     protected final ArrayList<ItemStack> contents;
     @SuppressWarnings("FieldCanBeLocal")
-    private final int maxItemSize = Integer.MAX_VALUE;
+    private long maxItemSize = Integer.MAX_VALUE;
     @SuppressWarnings("FieldCanBeLocal")
-    private final int maxcount = Integer.MAX_VALUE;
+    private long maxCount = Integer.MAX_VALUE;
 
     public ItemStackList() {
         contents = new ArrayList<>();
@@ -25,6 +25,12 @@ public class ItemStackList implements IItemStackList, Iterable<ItemStack> {
 
     public ItemStackList(List<ItemStack> contents) {
         this.contents = new ArrayList<>(contents);
+    }
+
+    public ItemStackList(List<ItemStack> contents, long maxItemSize, long maxStackSize) {
+        this.contents = new ArrayList<>(contents);
+        this.maxItemSize = maxItemSize;
+        this.maxCount = maxStackSize;
     }
 
     @Override
@@ -117,7 +123,7 @@ public class ItemStackList implements IItemStackList, Iterable<ItemStack> {
 
     @Override
     public long getStackCapacity() {
-        return maxcount;
+        return maxCount;
     }
 
     @Override
@@ -259,7 +265,7 @@ public class ItemStackList implements IItemStackList, Iterable<ItemStack> {
 
     @Override
     public void ejectAll(World world, int x, int y, int z) {
-        for (ItemStack content : getStacks()) {
+        for (ItemStack content : new ArrayList<>(getStacks())) {
             if(content == null) continue;
             eject(world,x,y,z,content.itemId,content.getDamage(),content.getStationNbt(),content.count,false);
         }

@@ -287,12 +287,14 @@ public class Catalyst {
 
     public static ItemStack newItemStack(Item item, int count, int metadata, NbtCompound tag){
         ItemStack stack = new ItemStack(item, count, metadata);
+        if(tag == null) tag = new NbtCompound();
         StationNBTSetter.cast(stack).setStationNbt(tag);
         return stack;
     }
 
     public static ItemStack newItemStack(Block block, int count, int metadata, NbtCompound tag){
         ItemStack stack = new ItemStack(block, count, metadata);
+        if(tag == null) tag = new NbtCompound();
         StationNBTSetter.cast(stack).setStationNbt(tag);
         return stack;
     }

@@ -32,6 +32,12 @@ public class FluidStackList implements IFluidStackList, Iterable<FluidStack> {
 		this.maxFluidStackSize = maxFluidStackSize;
 	}
 
+	public FluidStackList(List<FluidStack> contents, int maxFluidAmount, int maxFluidStackSize) {
+		this.contents = new ArrayList<>(contents);
+		this.maxFluidAmount = maxFluidAmount;
+		this.maxFluidStackSize = maxFluidStackSize;
+	}
+
 	@Override
 	public FluidStack add(FluidStack stack) {
 		if (stack == null) {

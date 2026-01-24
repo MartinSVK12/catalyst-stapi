@@ -5,6 +5,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.impl.item.StationNBTSetter;
 import org.jetbrains.annotations.UnmodifiableView;
 import sunsetsatellite.catalyst.Catalyst;
 
