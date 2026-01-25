@@ -261,13 +261,13 @@ public class InventoryWrapper implements IItemStackList {
     @Override
     public boolean contains(int id, int meta, NbtCompound data) {
         List<ItemStack> stacks = getStacks();
-        return stacks.stream().anyMatch(stack -> stack.itemId == id && stack.getDamage() == id);
+        return stacks.stream().anyMatch(stack -> stack.itemId == id && stack.getDamage() == meta);
     }
 
     @Override
     public boolean containsAtLeast(int id, int meta, NbtCompound data, long amount) {
         List<ItemStack> stacks = getStacks();
-        return stacks.stream().anyMatch((stack) -> stack.itemId == id && stack.getDamage() == id && stack.count >= amount);
+        return stacks.stream().anyMatch((stack) -> stack.itemId == id && stack.getDamage() == meta && stack.count >= amount);
     }
 
     @Override
