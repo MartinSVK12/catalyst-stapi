@@ -253,7 +253,7 @@ public class Vec3i {
         return result;
     }
 
-	public BlockEntity getTileEntity(BlockView worldSource){
+	public BlockEntity getBlockEntity(BlockView worldSource){
 		return worldSource.getBlockEntity(this.x, this.y, this.z);
 	}
 

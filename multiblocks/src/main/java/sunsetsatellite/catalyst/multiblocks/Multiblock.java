@@ -37,7 +37,32 @@ public class Multiblock extends Structure {
         return true;
     }*/
 
-	public boolean isValidAtSilent(World world, BlockInstance origin, Direction dir){
+	public boolean isBlockValidAt(World world, BlockInstance block, BlockInstance origin, Direction dir){
+		//fixme: broken
+		if(block == null) return true;
+		ArrayList<BlockInstance> blocks = getBlocks(origin.pos,dir);
+		ArrayList<BlockInstance> substitutions = getSubstitutions(origin.pos,dir);
+        BlockInstance part = null;
+		boolean found = false;
+        for (BlockInstance blockInstance : blocks) {
+            if (blockInstance.pos.equals(block.pos)) {
+				part = blockInstance;
+				if(blockInstance.equals(block)) {
+					found = true;
+				}
+				break;
+            }
+        }
+        if(!found){
+			boolean foundSub = substitutions.stream().anyMatch((BI) -> BI.pos.equals(block.pos) && BI.equals(block));
+			if (!foundSub) {
+				return part == null;
+			}
+		}
+		return found || part == null;
+	}
+
+	public boolean isValidAt(World world, BlockInstance origin, Direction dir){
 		ArrayList<BlockInstance> blocks = getBlocks(origin.pos,dir);
 		ArrayList<BlockInstance> substitutions = getSubstitutions(origin.pos,dir);
 		for (BlockInstance block : blocks) {

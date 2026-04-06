@@ -23,6 +23,7 @@
     "stationapi:event_bus_server": [
     ]
   },
+  "accessWidener": "catalyst-multiblocks.accesswidener",
   "mixins": [
     "catalyst-multiblocks.mixins.json"
   ],

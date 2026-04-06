@@ -18,6 +18,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.server.MinecraftServer;
@@ -28,9 +29,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.event.init.InitFinishedEvent;
 import net.modificationstation.stationapi.api.event.mod.InitEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
+import net.modificationstation.stationapi.api.nbt.NbtOps;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.registry.ItemRegistry;
 import net.modificationstation.stationapi.api.registry.Registry;
@@ -78,9 +81,9 @@ public class Catalyst {
 
     @EventListener
     public void onInitFinished(InitFinishedEvent event) {
-        for (RecipeEntryCrafting<?, ItemStack> recipe : CRAFTING_RECIPES.getAllRecipes()) {
+        /*for (RecipeEntryCrafting<?, ItemStack> recipe : CRAFTING_RECIPES.getAllRecipes()) {
             LOGGER.info(recipe);
-        }
+        }*/
         LOGGER.info(CRAFTING_RECIPES.getAllRecipes().size() + " recipes.");
     }
 
@@ -297,6 +300,14 @@ public class Catalyst {
         if(tag == null) tag = new NbtCompound();
         StationNBTSetter.cast(stack).setStationNbt(tag);
         return stack;
+    }
+
+    public static NbtCompound writeBlockState(BlockState state){
+        return (NbtCompound) BlockState.CODEC.encodeStart(NbtOps.INSTANCE, state).getOrThrow(false, Catalyst.LOGGER::error);
+    }
+
+    public static BlockState readBlockState(NbtCompound nbt){
+        return BlockState.CODEC.decode(NbtOps.INSTANCE, nbt).getOrThrow(false, Catalyst.LOGGER::error).getFirst();
     }
 
     public static NbtCompound readNbtFromStream(DataInputStream dis) {

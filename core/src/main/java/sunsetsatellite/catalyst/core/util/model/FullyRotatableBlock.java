@@ -3,21 +3,24 @@ package sunsetsatellite.catalyst.core.util.model;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.state.StateManager;
+import net.modificationstation.stationapi.api.template.block.TemplateBlock;
 import net.modificationstation.stationapi.api.template.block.TemplateBlockWithEntity;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.api.world.BlockStateView;
 import org.jetbrains.annotations.Nullable;
 
+import static net.modificationstation.stationapi.api.state.property.Properties.FACING;
 import static net.modificationstation.stationapi.api.state.property.Properties.HORIZONTAL_FACING;
 
-public abstract class RotatableBlockWithEntity extends TemplateBlockWithEntity implements LayeredCubeModel {
+public abstract class FullyRotatableBlock extends TemplateBlock implements LayeredCubeModel {
 
     public static final int[] ORIENTATION_HORIZONTAL = new int[]{
             0, 1, 3, 2, 4, 5,
@@ -28,7 +31,12 @@ public abstract class RotatableBlockWithEntity extends TemplateBlockWithEntity i
             0, 1, 5, 4, 3, 2
     };
 
-    private static final Direction[] DIRECTIONS = new Direction[] { Direction.WEST, Direction.NORTH, Direction.EAST, Direction.SOUTH };
+    public static final int[] ORIENTATION_VERTICAL = new int[]{
+            3, 2, 0, 1, 4, 5,
+            2, 3, 0, 1, 4, 5
+    };
+
+    private static final Direction[] DIRECTIONS = new Direction[]{Direction.DOWN, Direction.UP, Direction.WEST, Direction.EAST, Direction.SOUTH, Direction.NORTH};
 
     public final TextureLayer BASE = new TextureLayer(0);
     public final TextureLayer ACTIVE = new TextureLayer(1);
@@ -36,26 +44,54 @@ public abstract class RotatableBlockWithEntity extends TemplateBlockWithEntity i
 
     public final TextureLayer[] LAYERS = new TextureLayer[]{BASE,ACTIVE,OVERLAY};
 
-    public RotatableBlockWithEntity(Identifier identifier, Material material) {
+    public FullyRotatableBlock(Identifier identifier, Material material) {
         super(identifier, material);
+    }
+
+    public static int getFacingForPlacement(World world, int x, int y, int z, PlayerEntity player) {
+        if (MathHelper.abs((float)player.x - (float)x) < 2.0F && MathHelper.abs((float)player.z - (float)z) < 2.0F) {
+            double var5 = player.y + 1.82 - (double)player.standingEyeHeight;
+            if (var5 - (double)y > (double)2.0F) {
+                return 1;
+            }
+
+            if ((double)y - var5 > (double)0.0F) {
+                return 0;
+            }
+        }
+
+        int var7 = MathHelper.floor((double)(player.yaw * 4.0F / 360.0F) + (double)0.5F) & 3;
+        if (var7 == 0) {
+            return 2;
+        } else if (var7 == 1) {
+            return 5;
+        } else if (var7 == 2) {
+            return 3;
+        } else {
+            return var7 == 3 ? 4 : 0;
+        }
     }
 
     @Override
     public void onPlaced(World level, int x, int y, int z, LivingEntity living) {
         super.onPlaced(level, x, y, z, living);
-        Direction dir = DIRECTIONS[MathHelper.floor((double) (living.yaw * 4.0F / 360.0F) + 0.5D) & 3].getOpposite();
-        level.setBlockState(x, y, z, getDefaultState().with(HORIZONTAL_FACING,dir));
+        int facing = getFacingForPlacement(level, x, y, z, (PlayerEntity) living);
+        level.setBlockState(x, y, z, getDefaultState().with(FACING, DIRECTIONS[facing]));
     }
 
     @Override
     public void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         super.appendProperties(builder);
-        builder.add(HORIZONTAL_FACING);
+        builder.add(FACING);
     }
 
     @Override
     public int getTexture(int side, int meta) {
+        boolean isVertical = meta == 0 || meta == 1;
         int index = ORIENTATION_HORIZONTAL[6 * Math.min(meta, 5) + side];
+        if(isVertical){
+            index = ORIENTATION_VERTICAL[6 * meta + side];
+        }
         if(BASE.get(index) != null){
             // cope
             //noinspection DataFlowIssue
@@ -85,20 +121,32 @@ public abstract class RotatableBlockWithEntity extends TemplateBlockWithEntity i
     }
 
     public Atlas.Sprite getBaseTexture(BlockView view, BlockStateView blockStateView, int x, int y, int z, int meta, int side){
-        int facing = blockStateView.getBlockState(x, y, z).get(HORIZONTAL_FACING).getId();
+        int facing = blockStateView.getBlockState(x, y, z).get(FACING).getId();
+        boolean isVertical = facing == 0 || facing == 1;
         int index = ORIENTATION_HORIZONTAL[6 * Math.min(facing, 5) + side];
+        if(isVertical){
+            index = ORIENTATION_VERTICAL[6 * meta + side];
+        }
         return BASE.get(index);
     }
 
     public Atlas.Sprite getActiveTexture(BlockView view, BlockStateView blockStateView, int x, int y, int z, int meta, int side){
-        int facing = blockStateView.getBlockState(x, y, z).get(HORIZONTAL_FACING).getId();
+        int facing = blockStateView.getBlockState(x, y, z).get(FACING).getId();
+        boolean isVertical = facing == 0 || facing == 1;
         int index = ORIENTATION_HORIZONTAL[6 * Math.min(facing, 5) + side];
+        if(isVertical){
+            index = ORIENTATION_VERTICAL[6 * meta + side];
+        }
         return ACTIVE.get(index);
     }
 
     public Atlas.Sprite getOverlayTexture(BlockView view, BlockStateView blockStateView, int x, int y, int z, int meta, int side){
-        int facing = blockStateView.getBlockState(x, y, z).get(HORIZONTAL_FACING).getId();
+        int facing = blockStateView.getBlockState(x, y, z).get(FACING).getId();
+        boolean isVertical = facing == 0 || facing == 1;
         int index = ORIENTATION_HORIZONTAL[6 * Math.min(facing, 5) + side];
+        if(isVertical){
+            index = ORIENTATION_VERTICAL[6 * meta + side];
+        }
         return OVERLAY.get(index);
     }
 

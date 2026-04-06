@@ -8,8 +8,11 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.block.BlockState;
+import net.modificationstation.stationapi.api.nbt.NbtOps;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
+import sunsetsatellite.catalyst.Catalyst;
 import sunsetsatellite.catalyst.CatalystMultiblocks;
 import sunsetsatellite.catalyst.core.util.BlockInstance;
 import sunsetsatellite.catalyst.core.util.Direction;
@@ -102,14 +105,16 @@ public class Structure {
         NbtCompound blockTag = data.getCompound("Origin");
         int meta = blockTag.getInt("meta");
         Block block = getBlock(blockTag);
-        return new BlockInstance(block, new Vec3i(),meta,null);
+        BlockState state = Catalyst.readBlockState(blockTag.getCompound("state"));
+        return new BlockInstance(block, new Vec3i(),meta,state,null);
     }
 
     public BlockInstance getOrigin(Vec3i origin){
         NbtCompound blockTag = data.getCompound("Origin");
         int meta = blockTag.getInt("meta");
         Block block = getBlock(blockTag);
-        return new BlockInstance(block, origin,meta,null);
+        BlockState state = Catalyst.readBlockState(blockTag.getCompound("state"));
+        return new BlockInstance(block, origin,meta,state,null);
     }
 
 	public BlockInstance getOrigin(Vec3i origin, Direction dir){
@@ -125,7 +130,8 @@ public class Structure {
 			}
 		}
         Block block = getBlock(blockTag);
-		return new BlockInstance(block, origin,meta,null);
+        BlockState state = Catalyst.readBlockState(blockTag.getCompound("state"));
+		return new BlockInstance(block, origin,meta,state,null);
 	}
 
     public BlockInstance getOrigin(World world, Vec3i origin){
@@ -133,7 +139,8 @@ public class Structure {
         Vec3i pos = new Vec3i(blockTag.getCompound("pos"));
         int meta = blockTag.getInt("meta");
         Block block = getBlock(blockTag);
-        return new BlockInstance(block,pos,meta,world.getBlockEntity(pos.x, pos.y, pos.z));
+        BlockState state = Catalyst.readBlockState(blockTag.getCompound("state"));
+        return new BlockInstance(block,pos,meta,state,world.getBlockEntity(pos.x, pos.y, pos.z));
     }
 
     public ArrayList<BlockInstance> getTileEntities(){
@@ -143,7 +150,8 @@ public class Structure {
             Vec3i pos = new Vec3i(tileEntity.getCompound("pos"));
             int meta = tileEntity.getInt("meta");
             Block block = getBlock(tileEntity);
-            BlockInstance blockInstance = new BlockInstance(block,pos,meta,null);
+            BlockState state = Catalyst.readBlockState(tileEntity.getCompound("state"));
+            BlockInstance blockInstance = new BlockInstance(block,pos,meta,state,null);
             tiles.add(blockInstance);
         }
         return tiles;
@@ -156,7 +164,8 @@ public class Structure {
             Vec3i pos = new Vec3i(tileEntity.getCompound("pos")).add(origin);
             int meta = tileEntity.getInt("meta");
             Block block = getBlock(tileEntity);
-            BlockInstance blockInstance = new BlockInstance(block,pos,meta,null);
+            BlockState state = Catalyst.readBlockState(tileEntity.getCompound("state"));
+            BlockInstance blockInstance = new BlockInstance(block,pos,meta,state,null);
             tiles.add(blockInstance);
         }
         return tiles;
@@ -169,7 +178,8 @@ public class Structure {
             Vec3i pos = new Vec3i(tileEntity.getCompound("pos")).add(origin);
             int meta = tileEntity.getInt("meta");
             Block block = getBlock(tileEntity);
-            BlockInstance blockInstance = new BlockInstance(block,pos,meta,world.getBlockEntity(pos.x, pos.y, pos.z));
+            BlockState state = Catalyst.readBlockState(tileEntity.getCompound("state"));
+            BlockInstance blockInstance = new BlockInstance(block,pos,meta,state,world.getBlockEntity(pos.x, pos.y, pos.z));
             tiles.add(blockInstance);
         }
         return tiles;
@@ -191,7 +201,8 @@ public class Structure {
 				}
 			}
             Block block = getBlock(blockTag);
-			BlockInstance blockInstance = new BlockInstance(block,pos,meta,world.getBlockEntity(pos.x, pos.y, pos.z));
+            BlockState state = Catalyst.readBlockState(blockTag.getCompound("state"));
+			BlockInstance blockInstance = new BlockInstance(block,pos,meta,state,world.getBlockEntity(pos.x, pos.y, pos.z));
 			tiles.add(blockInstance);
 		}
 		return tiles;
@@ -233,7 +244,8 @@ public class Structure {
             Vec3i pos = new Vec3i(blockTag.getCompound("pos"));
             int meta = blockTag.getInt("meta");
             Block block = getBlock(blockTag);
-            BlockInstance blockInstance = new BlockInstance(block,pos,meta,null);
+            BlockState state = Catalyst.readBlockState(blockTag.getCompound("state"));
+            BlockInstance blockInstance = new BlockInstance(block,pos,meta,state,null);
             tiles.add(blockInstance);
         }
         return tiles;
@@ -246,7 +258,8 @@ public class Structure {
             Vec3i pos = new Vec3i(blockTag.getCompound("pos")).add(origin);
             int meta = blockTag.getInt("meta");
             Block block = getBlock(blockTag);
-            BlockInstance blockInstance = new BlockInstance(block,pos,meta,null);
+            BlockState state = Catalyst.readBlockState(blockTag.getCompound("state"));
+            BlockInstance blockInstance = new BlockInstance(block,pos,meta,state,null);
             tiles.add(blockInstance);
         }
         return tiles;
@@ -268,7 +281,8 @@ public class Structure {
 				}
 			}
             Block block = getBlock(blockTag);
-            BlockInstance blockInstance = new BlockInstance(block,pos,meta,null);
+            BlockState state = Catalyst.readBlockState(blockTag.getCompound("state"));
+            BlockInstance blockInstance = new BlockInstance(block,pos,meta,state,null);
             tiles.add(blockInstance);
         }
         return tiles;
@@ -281,7 +295,8 @@ public class Structure {
             Vec3i pos = new Vec3i(sub.getCompound("pos"));
             int meta = sub.getInt("meta");
             Block block = getBlock(sub);
-            BlockInstance blockInstance = new BlockInstance(block,pos,meta,null);
+            BlockState state = Catalyst.readBlockState(sub.getCompound("state"));
+            BlockInstance blockInstance = new BlockInstance(block,pos,meta,state,null);
             tiles.add(blockInstance);
         }
         return tiles;
@@ -294,7 +309,8 @@ public class Structure {
             Vec3i pos = new Vec3i(sub.getCompound("pos")).add(origin);
             int meta = sub.getInt("meta");
             Block block = getBlock(sub);
-            BlockInstance blockInstance = new BlockInstance(block,pos,meta,null);
+            BlockState state = Catalyst.readBlockState(sub.getCompound("state"));
+            BlockInstance blockInstance = new BlockInstance(block,pos,meta,state,null);
             tiles.add(blockInstance);
         }
         return tiles;
@@ -303,9 +319,9 @@ public class Structure {
     public ArrayList<BlockInstance> getSubstitutions(Vec3i origin, Direction dir){
         ArrayList<BlockInstance> tiles = new ArrayList<>();
         for (Object tag : data.getCompound("Substitutions").values()) {
-            NbtCompound tileEntity = (NbtCompound) tag;
-            Vec3i pos = new Vec3i(tileEntity.getCompound("pos")).rotate(origin, dir);
-			int meta = tileEntity.getInt("meta");
+            NbtCompound sub = (NbtCompound) tag;
+            Vec3i pos = new Vec3i(sub.getCompound("pos")).rotate(origin, dir);
+			int meta = sub.getInt("meta");
 			if (meta != -1 && meta != 0 && meta != 1) {
 				if (dir.shiftAxis() == Direction.Z_NEG) {
 					meta = Direction.getDirectionFromSide(meta).getOpposite().getSideNumber();
@@ -315,8 +331,9 @@ public class Structure {
 					meta = dir.shiftAxis() == Direction.X_NEG ? blockDir.getSideNumber() : blockDir.getOpposite().getSideNumber();
 				}
 			}
-            Block block = getBlock(tileEntity);
-            BlockInstance blockInstance = new BlockInstance(block,pos,meta,null);
+            Block block = getBlock(sub);
+            BlockState state = Catalyst.readBlockState(sub.getCompound("state"));
+            BlockInstance blockInstance = new BlockInstance(block,pos,meta,state,null);
             tiles.add(blockInstance);
         }
         return tiles;
@@ -327,7 +344,7 @@ public class Structure {
     }
 
     protected void loadFromNBT(String name) {
-        try (InputStream resource = this.getClass().getResourceAsStream("/assets/" + modId + "/structures/" + name + ".nbt")) {
+        try (InputStream resource = this.getClass().getResourceAsStream("/data/" + modId + "/structures/" + name + ".dat")) {
             if (resource != null) {
                 this.data = NbtIo.readCompressed(resource);
                 CatalystMultiblocks.LOGGER.info(String.format("Structure '%s' contains %d blocks.",name,this.data.getCompound("Blocks").values().size()));

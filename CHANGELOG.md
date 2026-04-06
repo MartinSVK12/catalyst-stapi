@@ -1,1 +1,1 @@
-- Fixed crash with items dropped on the ground.
+- Small changes.

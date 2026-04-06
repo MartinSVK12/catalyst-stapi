@@ -2,16 +2,16 @@ package sunsetsatellite.catalyst.multiblocks;
 
 import lombok.Getter;
 import net.mine_diver.unsafeevents.listener.EventListener;
-import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.Minecraft;
+import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.StationAPI;
 import net.modificationstation.stationapi.api.event.world.BlockSetEvent;
-import sun.misc.Signal;
-import sunsetsatellite.catalyst.Catalyst;
+import net.modificationstation.stationapi.api.state.property.Properties;
 import sunsetsatellite.catalyst.core.util.BlockInstance;
 import sunsetsatellite.catalyst.core.util.Direction;
 import sunsetsatellite.catalyst.core.util.vector.Vec3i;
+
+import static net.modificationstation.stationapi.api.state.property.Properties.HORIZONTAL_FACING;
 
 public class MultiblockInstance {
 
@@ -23,8 +23,8 @@ public class MultiblockInstance {
 	public MultiblockInstance(BlockEntity origin, Multiblock data) {
 		this.origin = origin;
 		this.data = data;
-		valid = verifyIntegrity();
         StationAPI.EVENT_BUS.register(this);
+		valid = verifyIntegrity(null);
 	}
 
     @EventListener
@@ -33,18 +33,37 @@ public class MultiblockInstance {
             valid = false;
             return;
         }
-        if(origin.world.getBlockEntity(origin.x, origin.y, origin.z) != origin || origin.world.getBlockId(origin.x, origin.y, origin.z) == 0) {
+        if(origin.world.getBlockId(origin.x, origin.y, origin.z) == 0) {
             valid = false;
             return;
         }
-        valid = verifyIntegrity();
+        BlockInstance blockInstance = new BlockInstance(
+                event.blockState.getBlock(),
+                new Vec3i(event.x, event.y, event.z),
+                event.blockMeta,
+                event.blockState,
+                null
+        );
+        valid = verifyIntegrity(blockInstance);
     }
 
-	public boolean verifyIntegrity(){
+	public boolean verifyIntegrity(BlockInstance changedBlock){
 		if(origin.world != null){
-			Block block = origin.getBlock();
-			if(block != null){
-				return data.isValidAtSilent(origin.world,new BlockInstance(block,new Vec3i(origin.x,origin.y,origin.z),origin), Direction.getDirectionFromSide(origin.world.getBlockMeta(origin.x,origin.y,origin.z)));
+			if(origin.getBlock() != null){
+				Direction direction = Direction.X_POS;
+                if (origin.world.getBlockState(origin.x, origin.y, origin.z).contains(Properties.HORIZONTAL_FACING)) {
+                    direction = Direction.getDirectionFromSide(origin.world.getBlockState(origin.x, origin.y, origin.z).get(HORIZONTAL_FACING).getId()).getOpposite();
+                }
+                BlockInstance originBlock = new BlockInstance(new Vec3i(origin.x, origin.y, origin.z), origin.world);
+                if(changedBlock == null){
+                    return data.isValidAt(
+                            origin.world,
+                            originBlock,
+                            direction
+                    );
+                } else {
+                    return data.isBlockValidAt(origin.world, changedBlock, originBlock, direction);
+                }
 			} else {
 				return false;
 			}
