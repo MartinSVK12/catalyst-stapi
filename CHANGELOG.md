@@ -1,1 +1,4 @@
-- Small changes.
+- Added fully rotatable block templates
+- Improvements to utility classes.
+- Added a system that allows for custom structures to be created/saved at runtime.
+- Deprecated and removed the multipart module in favor of a better implementation by NyaLIb.
