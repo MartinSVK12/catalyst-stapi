@@ -15,5 +15,3 @@ Available modules:
   - Better item inventory interaction through InventoryWrapper
 - Multiblocks
   - Support for multiblock structures/machines.
-- Multipart
-  - API and implementation for multiple block parts in one block.
