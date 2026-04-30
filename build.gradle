@@ -275,8 +275,7 @@ tasks.register('github') {
 
         List<RemapJarTask> ts = List.of(
                 rootProject.project(":core").remapJar as RemapJarTask,
-                rootProject.project(":multiblocks").remapJar as RemapJarTask,
-                rootProject.project(":multipart").remapJar as RemapJarTask,
+                rootProject.project(":multiblocks").remapJar as RemapJarTask
         )
 
         def github = GitHub.connectUsingOAuth(githubToken as String)
