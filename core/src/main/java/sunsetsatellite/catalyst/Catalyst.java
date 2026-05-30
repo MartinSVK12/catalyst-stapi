@@ -303,11 +303,11 @@ public class Catalyst {
     }
 
     public static NbtCompound writeBlockState(BlockState state){
-        return (NbtCompound) BlockState.CODEC.encodeStart(NbtOps.INSTANCE, state).getOrThrow(false, Catalyst.LOGGER::error);
+        return (NbtCompound) BlockState.CODEC.encodeStart(NbtOps.INSTANCE, state).getOrThrow();
     }
 
     public static BlockState readBlockState(NbtCompound nbt){
-        return BlockState.CODEC.decode(NbtOps.INSTANCE, nbt).getOrThrow(false, Catalyst.LOGGER::error).getFirst();
+        return BlockState.CODEC.decode(NbtOps.INSTANCE, nbt).getOrThrow().getFirst();
     }
 
     public static NbtCompound readNbtFromStream(DataInputStream dis) {

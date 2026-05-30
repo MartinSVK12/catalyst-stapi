@@ -89,7 +89,7 @@ public class BlockInstance {
     }
 
 	@Override
-	public final boolean equals(Object o) {
+	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (!(o instanceof BlockInstance that)) return false;
 
@@ -100,6 +100,16 @@ public class BlockInstance {
         });
 		return ((that.meta == this.meta && stateMatches) || this.meta == -1) && Objects.equals(block, that.block) && Objects.equals(pos, that.pos) && Objects.equals(tile, that.tile);
 	}
+
+    public boolean equalsIgnorePosition(BlockInstance that){
+        boolean stateMatches = that.state.getEntries().entrySet().stream().allMatch((E) -> {
+            Property<?> K = E.getKey();
+            Comparable<?> V = E.getValue();
+            return this.state.contains(K) && this.state.get(K).equals(V);
+        });
+        return ((that.meta == this.meta && stateMatches) || this.meta == -1) && Objects.equals(block, that.block) && Objects.equals(tile, that.tile);
+    }
+
 
 	@Override
     public int hashCode() {

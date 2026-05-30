@@ -24,7 +24,7 @@ public class MultiblockInstance {
 		this.origin = origin;
 		this.data = data;
         StationAPI.EVENT_BUS.register(this);
-		valid = verifyIntegrity(null);
+		verifyIntegrity(null);
 	}
 
     @EventListener
@@ -44,10 +44,10 @@ public class MultiblockInstance {
                 event.blockState,
                 null
         );
-        valid = verifyIntegrity(blockInstance);
+        verifyIntegrity(blockInstance);
     }
 
-	public boolean verifyIntegrity(BlockInstance changedBlock){
+	public void verifyIntegrity(BlockInstance changedBlock){
 		if(origin.world != null){
 			if(origin.getBlock() != null){
 				Direction direction = Direction.X_POS;
@@ -56,19 +56,19 @@ public class MultiblockInstance {
                 }
                 BlockInstance originBlock = new BlockInstance(new Vec3i(origin.x, origin.y, origin.z), origin.world);
                 if(changedBlock == null){
-                    return data.isValidAt(
+                    valid = data.isValidAt(
                             origin.world,
                             originBlock,
                             direction
                     );
                 } else {
-                    return data.isBlockValidAt(origin.world, changedBlock, originBlock, direction);
+                    valid = data.isBlockValidAt(origin.world, changedBlock, originBlock, direction);
                 }
 			} else {
-				return false;
+				valid = false;
 			}
 		} else {
-			return false;
+			valid = false;
 		}
 
 	}

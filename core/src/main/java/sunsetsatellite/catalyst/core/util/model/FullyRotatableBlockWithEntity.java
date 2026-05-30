@@ -35,7 +35,7 @@ public abstract class FullyRotatableBlockWithEntity extends TemplateBlockWithEnt
             3, 2, 0, 1, 4, 5
     };
 
-    private static final Direction[] DIRECTIONS = new Direction[] { Direction.WEST, Direction.NORTH, Direction.EAST, Direction.SOUTH };
+    private static final Direction[] DIRECTIONS = new Direction[] { Direction.SOUTH, Direction.WEST, Direction.NORTH, Direction.EAST };
 
     public final TextureLayer BASE = new TextureLayer(0);
     public final TextureLayer ACTIVE = new TextureLayer(1);

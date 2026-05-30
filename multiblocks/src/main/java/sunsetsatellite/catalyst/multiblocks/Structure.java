@@ -4,12 +4,9 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.nbt.NbtString;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.BlockState;
-import net.modificationstation.stationapi.api.nbt.NbtOps;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
 import sunsetsatellite.catalyst.Catalyst;
@@ -20,14 +17,16 @@ import sunsetsatellite.catalyst.core.util.vector.Vec3i;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+
+import static net.modificationstation.stationapi.api.state.property.Properties.HORIZONTAL_FACING;
 
 
 public class Structure {
     public String modId;
+    public String name;
     public Class<?>[] modClasses;
     public String translateKey;
     public String filePath;
@@ -37,21 +36,23 @@ public class Structure {
 
     public static HashMap<String,Structure> internalStructures = new HashMap<>();
 
-    public Structure(String modId, Class<?>[] modClasses, String translateKey, NbtCompound data, boolean placeAir, boolean replaceBlocks){
+    public Structure(String modId, Class<?>[] modClasses, String name, NbtCompound data, boolean placeAir, boolean replaceBlocks){
         this.modId = modId;
         this.modClasses = modClasses;
-        this.translateKey = "structure."+modId+"."+translateKey+".name";
+        this.name = name;
+        this.translateKey = "structure."+modId+"."+ name +".name";
         this.data = data;
         this.filePath = null;
         this.placeAir = placeAir;
         this.replaceBlocks = replaceBlocks;
-		CatalystMultiblocks.LOGGER.info(String.format("Structure '%s' contains %d blocks.",translateKey,this.data.getCompound("Blocks").values().size()));
+		CatalystMultiblocks.LOGGER.info(String.format("Structure '%s' contains %d blocks.", name,this.data.getCompound("Blocks").values().size()));
     }
 
-    public Structure(String modId, Class<?>[] modClasses, String translateKey, String filePath, boolean placeAir, boolean replaceBlocks){
+    public Structure(String modId, Class<?>[] modClasses, String name, String filePath, boolean placeAir, boolean replaceBlocks){
         this.modId = modId;
+        this.name = name;
         this.modClasses = modClasses;
-        this.translateKey = "structure."+modId+"."+translateKey+".name";
+        this.translateKey = "structure."+modId+"."+ name +".name";
         this.placeAir = placeAir;
         this.replaceBlocks = replaceBlocks;
         loadFromNBT(filePath);
@@ -251,6 +252,21 @@ public class Structure {
         return tiles;
     }
 
+    public BlockInstance getBlock(Vec3i pos){
+        return getBlocks().stream().filter(b -> b.pos.equals(pos)).findFirst().orElse(null);
+    }
+
+    public List<BlockInstance> getUniqueBlocks(){
+        List<BlockInstance> blocks = new ArrayList<>();
+        for (BlockInstance block : getBlocks()) {
+            block.pos.set(0,0,0);
+            if (!blocks.contains(block)) {
+                blocks.add(block);
+            }
+        }
+        return blocks;
+    }
+
     public ArrayList<BlockInstance> getBlocks(Vec3i origin){
         ArrayList<BlockInstance> tiles = new ArrayList<>();
         for (Object tag : data.getCompound("Blocks").values()) {
@@ -282,6 +298,20 @@ public class Structure {
 			}
             Block block = getBlock(blockTag);
             BlockState state = Catalyst.readBlockState(blockTag.getCompound("state"));
+
+            if (state != null && state.contains(HORIZONTAL_FACING)) {
+                int id = state.get(HORIZONTAL_FACING).getId();
+                if (dir.shiftAxis() == Direction.Z_NEG) {
+                    id = Direction.getDirectionFromSide(id).getOpposite().getSideNumber();
+                } else if (dir.shiftAxis() == Direction.X_NEG || dir.shiftAxis() == Direction.X_POS) {
+                    Direction blockDir = Direction.getDirectionFromSide(id);
+                    blockDir = blockDir != Direction.X_NEG && blockDir != Direction.X_POS ? blockDir.rotate(1) : blockDir.rotate(1).getOpposite();
+                    id = dir.shiftAxis() == Direction.X_NEG ? blockDir.getSideNumber() : blockDir.getOpposite().getSideNumber();
+                }
+                state = state.with(HORIZONTAL_FACING, Direction.getDirectionFromSide(id).to());
+            }
+
+
             BlockInstance blockInstance = new BlockInstance(block,pos,meta,state,null);
             tiles.add(blockInstance);
         }
@@ -333,6 +363,9 @@ public class Structure {
 			}
             Block block = getBlock(sub);
             BlockState state = Catalyst.readBlockState(sub.getCompound("state"));
+
+
+
             BlockInstance blockInstance = new BlockInstance(block,pos,meta,state,null);
             tiles.add(blockInstance);
         }
