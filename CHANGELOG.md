@@ -1,1 +1,1 @@
-- Updated to StAPI alpha 6.
+- Fixed minor mistake.
