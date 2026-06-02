@@ -6,16 +6,15 @@ import net.fabricmc.api.EnvironmentInterface;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.state.StateManager;
-import net.modificationstation.stationapi.api.template.block.TemplateBlock;
 import net.modificationstation.stationapi.api.template.block.TemplateBlockWithEntity;
 import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.SideUtil;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.api.world.BlockStateView;
 import org.jetbrains.annotations.Nullable;
@@ -42,14 +41,14 @@ public abstract class FullyRotatableBlockWithEntity extends TemplateBlockWithEnt
     private static final Direction[] DIRECTIONS = new Direction[] { Direction.SOUTH, Direction.WEST, Direction.NORTH, Direction.EAST };
 
     @Environment(EnvType.CLIENT)
-    public final TextureLayer BASE = new TextureLayer(0);
+    public final TextureLayer BASE = SideUtil.get(()->new TextureLayer(0),()->null);
     @Environment(EnvType.CLIENT)
-    public final TextureLayer ACTIVE = new TextureLayer(1);
+    public final TextureLayer ACTIVE = SideUtil.get(()->new TextureLayer(1),()->null);
     @Environment(EnvType.CLIENT)
-    public final TextureLayer OVERLAY = new TextureLayer(2);
+    public final TextureLayer OVERLAY = SideUtil.get(()->new TextureLayer(2),()->null);
 
     @Environment(EnvType.CLIENT)
-    public final TextureLayer[] LAYERS = new TextureLayer[]{BASE,ACTIVE,OVERLAY};
+    public final TextureLayer[] LAYERS = SideUtil.get(()->new TextureLayer[]{BASE,ACTIVE,OVERLAY},()->null);
 
     public FullyRotatableBlockWithEntity(Identifier identifier, Material material) {
         super(identifier, material);

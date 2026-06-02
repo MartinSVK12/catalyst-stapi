@@ -14,6 +14,7 @@ import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.state.StateManager;
 import net.modificationstation.stationapi.api.template.block.TemplateBlock;
 import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.SideUtil;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.api.world.BlockStateView;
 import org.jetbrains.annotations.Nullable;
@@ -33,13 +34,14 @@ public abstract class RotatableBlock extends TemplateBlock implements LayeredCub
     private static final Direction[] DIRECTIONS = new Direction[] { Direction.WEST, Direction.NORTH, Direction.EAST, Direction.SOUTH };
 
     @Environment(EnvType.CLIENT)
-    public final TextureLayer BASE = new TextureLayer(0);
+    public final TextureLayer BASE = SideUtil.get(()->new TextureLayer(0),()->null);
     @Environment(EnvType.CLIENT)
-    public final TextureLayer ACTIVE = new TextureLayer(1);
+    public final TextureLayer ACTIVE = SideUtil.get(()->new TextureLayer(1),()->null);
     @Environment(EnvType.CLIENT)
-    public final TextureLayer OVERLAY = new TextureLayer(2);
+    public final TextureLayer OVERLAY = SideUtil.get(()->new TextureLayer(2),()->null);
+
     @Environment(EnvType.CLIENT)
-    public final TextureLayer[] LAYERS = new TextureLayer[]{BASE,ACTIVE,OVERLAY};
+    public final TextureLayer[] LAYERS = SideUtil.get(()->new TextureLayer[]{BASE,ACTIVE,OVERLAY},()->null);
 
     public RotatableBlock(Identifier identifier, Material material) {
         super(identifier, material);

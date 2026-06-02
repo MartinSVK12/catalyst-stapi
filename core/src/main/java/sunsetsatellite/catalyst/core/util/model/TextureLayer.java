@@ -12,7 +12,6 @@ import sunsetsatellite.catalyst.core.util.Side;
 
 import java.util.Arrays;
 
-@Environment(EnvType.CLIENT)
 public class TextureLayer {
     public final Atlas.Sprite[] coordinates = new Atlas.Sprite[6];
     @Getter
