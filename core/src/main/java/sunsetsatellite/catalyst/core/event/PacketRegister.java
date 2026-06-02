@@ -11,6 +11,7 @@ import sunsetsatellite.catalyst.core.util.mp.BlockEntityUpdatePacket;
 import sunsetsatellite.catalyst.core.util.mp.PlayerEnhancedActionC2SPacket;
 import sunsetsatellite.catalyst.core.util.mp.PlayerEnhancedInteractBlockC2SPacket;
 import sunsetsatellite.catalyst.core.util.mp.ScreenActionPacket;
+import sunsetsatellite.catalyst.core.util.mp.gui.OpenGuiPacket;
 
 public class PacketRegister {
 
@@ -19,6 +20,7 @@ public class PacketRegister {
 
     @EventListener
     public void registerPackets(PacketRegisterEvent event) {
+        Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("open_gui"), OpenGuiPacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("screen_action"), ScreenActionPacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("block_entity_update"), BlockEntityUpdatePacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("enhanced_player_interact"), PlayerEnhancedInteractBlockC2SPacket.TYPE);
