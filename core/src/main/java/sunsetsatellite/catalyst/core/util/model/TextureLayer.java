@@ -1,6 +1,8 @@
 package sunsetsatellite.catalyst.core.util.model;
 
 import lombok.Getter;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -10,6 +12,7 @@ import sunsetsatellite.catalyst.core.util.Side;
 
 import java.util.Arrays;
 
+@Environment(EnvType.CLIENT)
 public class TextureLayer {
     public final Atlas.Sprite[] coordinates = new Atlas.Sprite[6];
     @Getter

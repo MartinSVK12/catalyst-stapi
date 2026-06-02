@@ -1,5 +1,8 @@
 package sunsetsatellite.catalyst.core.util.model;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvironmentInterface;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
@@ -19,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.modificationstation.stationapi.api.state.property.Properties.FACING;
 
+@EnvironmentInterface(value = EnvType.CLIENT, itf = LayeredCubeModel.class)
 public abstract class FullyRotatableBlockWithEntity extends TemplateBlockWithEntity implements LayeredCubeModel {
 
     public static final int[] ORIENTATION_HORIZONTAL = new int[]{
@@ -37,10 +41,14 @@ public abstract class FullyRotatableBlockWithEntity extends TemplateBlockWithEnt
 
     private static final Direction[] DIRECTIONS = new Direction[] { Direction.SOUTH, Direction.WEST, Direction.NORTH, Direction.EAST };
 
+    @Environment(EnvType.CLIENT)
     public final TextureLayer BASE = new TextureLayer(0);
+    @Environment(EnvType.CLIENT)
     public final TextureLayer ACTIVE = new TextureLayer(1);
+    @Environment(EnvType.CLIENT)
     public final TextureLayer OVERLAY = new TextureLayer(2);
 
+    @Environment(EnvType.CLIENT)
     public final TextureLayer[] LAYERS = new TextureLayer[]{BASE,ACTIVE,OVERLAY};
 
     public FullyRotatableBlockWithEntity(Identifier identifier, Material material) {
@@ -65,6 +73,7 @@ public abstract class FullyRotatableBlockWithEntity extends TemplateBlockWithEnt
         builder.add(FACING);
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public int getTexture(int side, int meta) {
         int index = ORIENTATION_HORIZONTAL[6 * Math.min(meta, 5) + side];
@@ -76,16 +85,19 @@ public abstract class FullyRotatableBlockWithEntity extends TemplateBlockWithEnt
         return super.getTexture(side, meta);
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public TextureLayer[] getTextureLayers() {
         return LAYERS;
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public boolean isLayerFullbright(int layer) {
         return layer == OVERLAY.getIndex();
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public Atlas.@Nullable Sprite getLayerTexture(BlockView view, BlockStateView blockStateView, int x, int y, int z, int meta, int side, int layer) {
         return switch (layer) {
@@ -96,6 +108,7 @@ public abstract class FullyRotatableBlockWithEntity extends TemplateBlockWithEnt
         };
     }
 
+    @Environment(EnvType.CLIENT)
     public Atlas.Sprite getBaseTexture(BlockView view, BlockStateView blockStateView, int x, int y, int z, int meta, int side){
         int facing = blockStateView.getBlockState(x, y, z).get(FACING).getId();
         boolean isVertical = facing == 0 || facing == 1;
@@ -106,6 +119,7 @@ public abstract class FullyRotatableBlockWithEntity extends TemplateBlockWithEnt
         return BASE.get(index);
     }
 
+    @Environment(EnvType.CLIENT)
     public Atlas.Sprite getActiveTexture(BlockView view, BlockStateView blockStateView, int x, int y, int z, int meta, int side){
         int facing = blockStateView.getBlockState(x, y, z).get(FACING).getId();
         boolean isVertical = facing == 0 || facing == 1;
@@ -116,6 +130,7 @@ public abstract class FullyRotatableBlockWithEntity extends TemplateBlockWithEnt
         return ACTIVE.get(index);
     }
 
+    @Environment(EnvType.CLIENT)
     public Atlas.Sprite getOverlayTexture(BlockView view, BlockStateView blockStateView, int x, int y, int z, int meta, int side){
         int facing = blockStateView.getBlockState(x, y, z).get(FACING).getId();
         boolean isVertical = facing == 0 || facing == 1;
